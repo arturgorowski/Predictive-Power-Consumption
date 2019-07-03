@@ -1,4 +1,5 @@
-const tvListUrl = ["/https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe55q60rat",
+const tvListUrl = [
+    "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe55q60rat",
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe55q60rat",
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe65q90rat",
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe65q90rat",
@@ -97,7 +98,8 @@ const tvListUrl = ["/https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsu
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe49q60rat",
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-qled-samsung-qe49q60rat",
     "https://mediamarkt.pl/rtv-i-telewizory/telewizor-skymaster-50su1505",
-    "https://mediamarkt.pl/rtv-i-telewizory/telewizor-skymaster-50su1505"]
+    "https://mediamarkt.pl/rtv-i-telewizory/telewizor-skymaster-50su1505"
+]
 
 
 module.exports = [tvListUrl]  
