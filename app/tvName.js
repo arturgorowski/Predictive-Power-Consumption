@@ -5,13 +5,13 @@ const tvNameLink = [];
 const tvNameList = [];
 let name, link, pageNumber = 1;
 
-req();
+getNameAndLinkTv();
 
 function parseResponseHtml(html) {
     const $ = cheerio.load(html);
 
     let attrProductName = $("a.js-product-name")
-    let page = $("a.m-pagination_item.m-pagination_next")
+    //let page = $("a.m-pagination_item.m-pagination_next")
 
     let it = 1;
     for (let i = 0; i < attrProductName.length - 1; i++) {
@@ -24,23 +24,23 @@ function parseResponseHtml(html) {
             //console.log('name', name)
 
             link = 'https://mediamarkt.pl' + productName.href
-            tvNameLink.push(i, link)
-            //console.log(link)
+            tvNameLink.push(link)
+            console.log(link)
 
         } else {
             productName = attrProductName[i + 1].attribs
         }
     }
-    if (page.length > 0) {
-        pageNumber++
-        req()
-    }
+    // if (page.length > 0) {
+    //     pageNumber++
+    //     req()
+    // }
     console.log(tvNameList)
     console.log(tvNameLink)
     console.log(it)
 }
 
-function req() {
+function getNameAndLinkTv() {
     request(url + pageNumber, function (error, response, html) {
         if (!error && response.statusCode == 200) {
             try {
