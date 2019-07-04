@@ -1,2 +1,3 @@
 require( 'babel-core/register' );
-require( './app');
+//require( './mediaMarkt/tv');
+require( './mediaExpert/tv');

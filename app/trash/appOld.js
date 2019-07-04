@@ -1,4 +1,4 @@
-const tvListUrl = require('./temp2');
+const tvListUrl = require('./tvListUrl2');
 const cheerio = require('cheerio');
 const request = require('request');
 

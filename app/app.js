@@ -1,4 +1,4 @@
-const tvListUrl = require('./temp2');
+const tvListUrl = require('./trash/tvListUrl2');
 const cheerio = require('cheerio');
 const request = require('request');
 
@@ -97,6 +97,7 @@ function parseResponseHtml(html) {
         throw error
     }
     console.log(">>> data", data)
+    console.timeEnd("first")
 }
 
 function getPowerInformation(tvNameAddress) {
@@ -130,6 +131,7 @@ function getPowerInformation(tvNameAddress) {
     }, Promise.resolve(promises))
         .then(htmlBody => {
             //console.log(">>> htmlBody", htmlBody);
+            console.time("first")
             parseResponseHtml(htmlBody)
             //return htmlBody;
         }).then(model => {
