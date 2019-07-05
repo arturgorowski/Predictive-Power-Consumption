@@ -1,7 +1,5 @@
-const tvListUrl = require('../trash/tvListUrl2');
 const cheerio = require('cheerio');
-const request = require('request');
-var rp = require('request-promise');
+let rp = require('request-promise');
 
 const data = [];
 let energyClass = '',
@@ -10,37 +8,27 @@ let energyClass = '',
     annualEnergyConsumption = '',
     powerType;
 
-const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory';
+const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1;
 
 const getNameAndAddressesTv = () => {
-    rp(url)
+    rp(url + pageNumber)
         .then((html) => {
-            console.time("first")
+            console.time("timer")
             parseResponseHtmlNameAddress(html)
         })
         .catch((error) => {
             throw error
         })
-    // request(url, function (error, response, html) {
-    //     if (!error && response.statusCode == 200) {
-    //         try {
-    //             console.time("first")
-    //             parseResponseHtmlNameAddress(html)
-    //         } catch (error) {
-    //             throw error
-    //         }
-    //     }
-    // })
 }
 getNameAndAddressesTv();
 
-parseResponseHtmlNameAddress = (html) => {
+const parseResponseHtmlNameAddress = (html) => {
     const $ = cheerio.load(html);
 
     let attrProductName = $("a.js-product-name")
-    //let page = $("a.m-pagination_item.m-pagination_next")
+    let page = $("a.m-pagination_item.m-pagination_next")
 
     for (let i = 0; i < attrProductName.length - 1; i++) {
 
@@ -54,16 +42,18 @@ parseResponseHtmlNameAddress = (html) => {
             productName = attrProductName[i + 1].attribs
         }
     }
-    // if (page.length > 0) {
-    //     pageNumber++
-    //     getPowerInformation(tvNameLink)
-    // }
+    if (pageNumber <= page.length) {
+        pageNumber++
+        getNameAndAddressesTv()
+        //getPowerInformation(tvNameAndAddress)
+    }
     getPowerInformation(tvNameAndAddress)
     console.log(tvNameAndAddress)
 }
 
 let addresses = []
-getPowerInformation = (tvNameAddress) => {
+let iter = 1
+const getPowerInformation = (tvNameAddress) => {
 
     tvNameAddress.forEach((address) => {
         addresses.push(address.address)
@@ -75,7 +65,8 @@ getPowerInformation = (tvNameAddress) => {
             rp(url)
                 .then((response) => {
                     resolve(response)
-                    //console.log(response)
+                    console.log(iter)
+                    iter++
                 })
                 .catch((err) => {
                     reject(err)
@@ -105,10 +96,11 @@ getPowerInformation = (tvNameAddress) => {
         });
 }
 
-parseResponseHtml = (html) => {
+let id = 1;
+const parseResponseHtml = (html) => {
     try {
         let len = (html.length) / 2
-        let id = 1;
+        
         for (let i = len; i < html.length; i++) {
             const $ = cheerio.load(html[i])
             //console.log(html)
@@ -121,11 +113,12 @@ parseResponseHtml = (html) => {
             powerNode.children.forEach((item, k) => {
                 if (item.type !== "text") {
 
-                    if (k === 3) energyClass = $(item).find("dd").text().trim()
-                    if (k === 5) powerConsumption = Number($(item).find("dd").text().trim())
-                    if (k === 7) powerConsumptionStandby = Number($(item).find("dd").text().trim())
-                    if (k === 9) annualEnergyConsumption = Number($(item).find("dd").text().trim());
-                    if (k === 11) powerType = $(item).find("dd").text().trim();
+                    let dt = $(item).find("dt").text().trim()
+                    if (dt === 'Klasa energetyczna') energyClass = $(item).find("dd").text().trim()
+                    if (dt === 'Pobór mocy (IEC 62087 Edition 2) [W]') powerConsumption = Number($(item).find("dd").text().trim())
+                    if (dt === 'Pobór mocy w trybie czuwania [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim())
+                    if (dt === 'Roczne zużycie energii [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim())
+                    if (dt === 'Rodzaj zasilania') powerType = $(item).find("dd").text().trim()
                 }
             })
 
@@ -144,5 +137,5 @@ parseResponseHtml = (html) => {
         throw error
     }
     console.log(">>> data", data)
-    console.timeEnd("first")
+    console.timeEnd("timer")
 }

@@ -1,8 +1,8 @@
 const cheerio = require('cheerio');
-const request = require('request');
-const tvListUrl = require('./tvListUrl');
 var rp = require('request-promise');
 
+// get all tv url 
+//$("div.list div").map((k,v)=> `https://www.euro.com.pl${$(v).attr("data-product-href")}`)
 const data = [];
 let energyClass = '',
     powerConsumption = '',
@@ -23,7 +23,6 @@ const getNameAndAddressesTv = () => {
             throw error
         })
 }
-
 getNameAndAddressesTv();
 
 function parseResponseHtmlNameAddress(html) {
@@ -97,44 +96,30 @@ function parseResponseHtml(html) {
     try {
         let len = (html.length) / 2;
         let id = 1;
-        let table = [];
         for (let i = len; i < html.length; i++) {
             const $ = cheerio.load(html[i])
             //console.log(html[i])
+            //let attrProductName = $("div.c-offerBox_header.clearfix2 a")
+            let attrProductName = $("h3.is-productTitle.tab_desc_title")
+            let productName = attrProductName[0].childNodes[0].nodeValue.trim()
+            //console.log(attrProductName[0].childNodes[0].nodeValue.trim())
             let div = $('table.m-product_dataRow.is-technology')
             //console.log("div >>>", div)
             const powerNode = div[0].childNodes[1].children.filter(item=>item.type === "tag");
-            console.log("power node >>>", powerNode, "length", powerNode.length);
+            //console.log("power node >>>", powerNode, "length", powerNode.length);
 
             let startIdx = $("h2:contains('Efektywność energetyczna')").parent("td").parent("tr").index();
-            console.log("energy class", powerNode[startIdx+2].children.filter(item=>item.type === "tag"));
-            // powerNode.forEach((item, k) => {
-            //     if (item.type !== "text") {
-            //         table.push(item)
-                  
-            //     }
-            // })
-            // table.forEach((item, k)=>{
-            //     console.log(startIdx, table[startIdx], table[startIdx + 1], table[startIdx + 2], table[startIdx + 3]);
-            // })
-            // energyClass = powerNode.children().eq(startIdx + 2);
-            // powerConsumption = powerNode.children().eq(startIdx + 4);
-            // powerConsumptionStandby = powerNode.children().eq(startIdx + 6);
-            // annualEnergyConsumption = powerNode.children().eq(startIdx + 8);
-            // powerType = powerNode.children().eq(startIdx + 10);
+            energyClass = powerNode[startIdx+1].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
+            powerConsumption = powerNode[startIdx+2].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
+            powerConsumptionStandby = powerNode[startIdx+3].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
+            annualEnergyConsumption = powerNode[startIdx+4].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
+            powerType = powerNode[startIdx+5].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
 
-            // powerNode.forEach((item, k) => {
-            //     if (item.type !== "text") {
-            //         item.childNodes[k]
-            //         if (k === 144) energyClass = $(item.children[3]).text().trim()
-            //         if (k === 146) powerConsumption = Number($(item.children[3]).text().trim())
-            //         if (k === 148) powerConsumptionStandby = Number($(item.children[3]).text().trim())
-            //         if (k === 150) annualEnergyConsumption = Number($(item.children[3]).text().trim())
-            //         if (k === 152) powerType = $(item.children[3]).text().trim()
-            //     }
-            // })
+            //console.log(energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, powerType)
+
             data.push({
                 id,
+                productName,
                 energyClass,
                 powerConsumption,
                 powerConsumptionStandby,
