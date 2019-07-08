@@ -1,9 +1,13 @@
 const cheerio = require('cheerio');
-var rp = require('request-promise');
-const tvNameAddress = require('./tvListUrl');
+let rp = require('request-promise');
+const DeviceListUrlScrapper = require('../app').DeviceListUrlScrapper
 
-// get all tv url 
-//$("div.list div.product-box.js-UA-product").map((k,v)=> `https://www.euro.com.pl${$(v).attr("data-product-href")}`)
+/**
+ * get all tv url 
+ * $("div.list div.product-box.js-UA-product").map((k,v)=> `https://www.euro.com.pl${$(v).attr("data-product-href")}`)
+ * 
+ */
+
 
 const data = [];
 let energyClass = '',
@@ -16,39 +20,48 @@ const url = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=main
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1;
 
-const getNameAndAddressesTv = () => {
-    rp(url)
-        .then((html) => {
-            console.time("timer")
-            parseResponseHtmlNameAddress(html)
-        })
-        .catch((error) => {
-            throw error
-        })
-}
-getNameAndAddressesTv();
+const request = new DeviceListUrlScrapper(url);
 
-function parseResponseHtmlNameAddress(html) {
-    const $ = cheerio.load(html);
+request.getNameAndAddresses()
+    .then(result => {
+        console.log("result >>> ", result);
+        getPowerInformation(result)
+    })
 
-    let attrProductName = $("div.list div.product-box.js-UA-product")
+// const getNameAndAddressesTv = () => {
+//     rp(url)
+//         .then((html) => {
+//             console.time("timer")
+//             parseResponseHtmlNameAddress(html)
+//         })
+//         .catch((error) => {
+//             throw error
+//         })
+// }
+// getNameAndAddressesTv();
+
+// function parseResponseHtmlNameAddress(html) {
+//     const $ = cheerio.load(html);
+
+//     let attrProductName = $("div.list div.product-box.js-UA-product")
+//     let nameDiv = $("div.list div.product-box.js-UA-product h2.product-name")
     
-    for (let i = 0; i < attrProductName.length - 1; i++){
+//     for (let i = 0; i < attrProductName.length - 1; i++){
 
-        let productName = attrProductName[i].attribs;
+//         let productName = attrProductName[i].attribs;
        
-            //name = productName.title;
-            address = 'https://www.euro.com.pl' + productName['data-product-href']
-            tvNameAndAddress.push({ i, address })
-    }
-    getPowerInformation(tvNameAndAddress);
-    console.log(tvNameAndAddress)
-}
+//             let name = nameDiv[i].children[1].children[0].nodeValue.trim()
+//             address = 'https://www.euro.com.pl' + productName['data-product-href']
+//             tvNameAndAddress.push({ i, name, address })
+//     }
+//     getPowerInformation(tvNameAndAddress);
+//     console.log(tvNameAndAddress)
+// }
 
 let addresses = []
-getPowerInformation = (tvNameAddress) => {
+getPowerInformation = (tvNameAndAddress) => {
 
-    tvNameAddress.forEach((address) => {
+    tvNameAndAddress.forEach((address) => {
         addresses.push(address.address)
     })
 
@@ -114,9 +127,9 @@ function parseResponseHtml(html) {
             powerConsumption = powerNode[powerConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
             powerConsumptionStandby = powerNode[powerConsumptionStandbyIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
             annualEnergyConsumption = powerNode[annualEnergyConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            powerType = powerNode[powerTypeIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
+            powerTypeIndex > 1 ? powerType = powerNode[powerTypeIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() : powerType = 'no data'
 
-            //console.log(energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, powerType)
+            console.log(i, "--",energyClass,"--", powerConsumption,"--", powerConsumptionStandby,"--", annualEnergyConsumption,"--", powerType)
 
             data.push({
                 id,

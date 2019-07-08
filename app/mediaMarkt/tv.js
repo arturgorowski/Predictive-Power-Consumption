@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 let rp = require('request-promise');
+const DeviceListUrlScrapper = require('../app').DeviceListUrlScrapper
 
 const data = [];
 let energyClass = '',
@@ -8,48 +9,58 @@ let energyClass = '',
     annualEnergyConsumption = '',
     powerType;
 
-const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
+//const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
+const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory';
+
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1;
 
-const getNameAndAddressesTv = () => {
-    rp(url + pageNumber)
-        .then((html) => {
-            console.time("timer")
-            parseResponseHtmlNameAddress(html)
-        })
-        .catch((error) => {
-            throw error
-        })
-}
-getNameAndAddressesTv();
+const request = new DeviceListUrlScrapper(url);
 
-const parseResponseHtmlNameAddress = (html) => {
-    const $ = cheerio.load(html);
+request.getNameAndAddresses()
+    .then(result => {
+        //console.log("result >>> ", result);
+        getPowerInformation(result)
+    })
 
-    let attrProductName = $("a.js-product-name")
-    let page = $("a.m-pagination_item.m-pagination_next")
+// const getNameAndAddressesTv = () => {
+//     rp(url + pageNumber)
+//         .then((html) => {
+//             console.time("timer")
+//             parseResponseHtmlNameAddress(html)
+//         })
+//         .catch((error) => {
+//             throw error
+//         })
+// }
+// getNameAndAddressesTv();
 
-    for (let i = 0; i < attrProductName.length - 1; i++) {
+// const parseResponseHtmlNameAddress = (html) => {
+//     const $ = cheerio.load(html);
 
-        let productName = attrProductName[i].attribs;
-        if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
-            name = productName.title;
-            address = 'https://mediamarkt.pl' + productName.href
-            tvNameAndAddress.push({ i, name, address })
+//     let attrProductName = $("a.js-product-name")
+//     let page = $("a.m-pagination_item.m-pagination_next")
 
-        } else {
-            productName = attrProductName[i + 1].attribs
-        }
-    }
-    if (pageNumber <= page.length) {
-        pageNumber++
-        getNameAndAddressesTv()
-        //getPowerInformation(tvNameAndAddress)
-    }
-    getPowerInformation(tvNameAndAddress)
-    console.log(tvNameAndAddress)
-}
+//     for (let i = 0; i < attrProductName.length - 1; i++) {
+
+//         let productName = attrProductName[i].attribs;
+//         if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
+//             name = productName.title;
+//             address = 'https://mediamarkt.pl' + productName.href
+//             tvNameAndAddress.push({ i, name, address })
+
+//         } else {
+//             productName = attrProductName[i + 1].attribs
+//         }
+//     }
+//     // if (pageNumber <= page.length) {
+//     //     pageNumber++
+//     //     getNameAndAddressesTv()
+//     //     //getPowerInformation(tvNameAndAddress)
+//     // }
+//     getPowerInformation(tvNameAndAddress)
+//     console.log(tvNameAndAddress)
+// }
 
 let addresses = []
 let iter = 1
@@ -100,7 +111,7 @@ let id = 1;
 const parseResponseHtml = (html) => {
     try {
         let len = (html.length) / 2
-        
+
         for (let i = len; i < html.length; i++) {
             const $ = cheerio.load(html[i])
             //console.log(html)
@@ -137,5 +148,4 @@ const parseResponseHtml = (html) => {
         throw error
     }
     console.log(">>> data", data)
-    console.timeEnd("timer")
 }

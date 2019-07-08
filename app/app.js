@@ -1,12 +1,19 @@
+const cheerio = require('cheerio');
 let rp = require('request-promise');
 
+const tvNameAndAddress = [];
+let name, address, pageNumber = 1, iterator = 0;
+
+/**
+ *  
+ * Wybranie listy do parsowania urządzeń
+ */
 class DeviceListParser {
 
     constructor() {
-        console.log("HELLO FROM :: DeviceListParser")
+        console.log("HELLO FROM :: DeviceListParser");
 
     }
-
 }
 
 DeviceListParser.create = (market) => {
@@ -14,76 +21,160 @@ DeviceListParser.create = (market) => {
     switch (market) {
 
         case "mediamarkt":
-            return new DeviceListMMParser();
+            return new DeviceListMediaMarktParser();
             break;
 
         case "mediaexpert":
-            return new DeviceListMEParser();
+            return new DeviceListMediaExpertParser();
             break;
 
         case "eurortvagd":
-            return new DeviceListERAParser();
+            return new DeviceListEuroRtvAgdParser();
             break;
-
     }
 }
 
-class DeviceListMMParser extends DeviceListParser {
+/**
+ * 
+ * Parser urządzeń ze strony Media Markt 
+ */
+
+class DeviceListMediaMarktParser extends DeviceListParser {
 
     constructor() {
         super();
-        console.log(`HELLO FROM :: ${this.constructor}`);
-
     }
 
     parse(html) {
+        const $ = cheerio.load(html);
 
-        //@todo ...
-        console.log(`HELLO FROM :: ${this.constructor.name}`, html);
-    }
+        let attrProductName = $("a.js-product-name");
+        let page = $("a.m-pagination_item.m-pagination_next");
 
-}
+        // for (let i = 0; i < attrProductName.length - 1; i++) {
 
-class DeviceListMEParser extends DeviceListParser {
+        //     let productName = attrProductName[i].attribs;
+        //     if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
+        //         name = productName.title;
+        //         address = 'https://mediamarkt.pl' + productName.href;
+        //         tvNameAndAddress.push({ i, name, address });
 
-    constructor() {
-        super();
-        console.log(`HELLO FROM :: constructor ${this.constructor.name}`);
-    }
+        //     } else {
+        //         productName = attrProductName[i + 1].attribs;
+        //     }
+        // }
+        let iter = 1
+        if (iterator <= page.length) {
+            pageNumber++
+            iterator++
+            for (let i = 0; i < attrProductName.length - 1; i++) {
 
-    parse(html) {
+                let productName = attrProductName[i].attribs;
+                if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
+                    name = productName.title;
+                    address = 'https://mediamarkt.pl' + productName.href;
+                    tvNameAndAddress.push({ iter, name, address });
+                    iter++
 
-        //@todo ...
-        console.log(`HELLO FROM :: parse ${this.constructor.name} >>> `, html);
-    }
+                } else {
+                    productName = attrProductName[i + 1].attribs;
+                }
+            }
 
-}
+            const recursion = new DeviceListUrlScrapper(mm + pageNumber);
+            recursion.getNameAndAddresses()
+                .then(result => {
+                    console.log("result >>> ", result);
+                })
 
-class DeviceListERAParser extends DeviceListParser {
+        }
 
-    constructor() {
-        super();
-        console.log(`HELLO FROM :: ${this.constructor}`);
-
-    }
-
-    parse(html) {
-
-        //@todo ...
-        console.log(`HELLO FROM :: ${this.constructor.name}`, html);
+        //console.log("tablica adresow >>>", tvNameAndAddress);
+        else return tvNameAndAddress;
     }
 
 }
 
 /**
  * 
- * Utworzenie tablicy z adresami 
+ * Parser urządzeń ze strony Media Expert 
+ */
+
+class DeviceListMediaExpertParser extends DeviceListParser {
+
+    constructor() {
+        super();
+    }
+
+    parse(html) {
+        const $ = cheerio.load(html);
+
+        let attrProductName = $("div.c-offerBox_header.clearfix2 a");
+        // $("div.c-offerBox_header.clearfix2 a").map((k,v)=> `https://mediaexpert.pl${$(v).attr("href")}`)
+        //let page = $("a.m-pagination_item.m-pagination_next")
+
+        for (let i = 0; i < attrProductName.length - 1; i++) {
+
+            let productName = attrProductName[i].attribs;
+            if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
+                name = productName.title;
+                address = 'https://mediaexpert.pl' + productName.href;
+                tvNameAndAddress.push({ i, name, address });
+
+            } else {
+                productName = attrProductName[i + 1].attribs;
+            }
+        }
+        // if (page.length > 0) {
+        //     pageNumber++
+        //     getPowerInformation(tvNameAndAddress)
+        // }
+        //getPowerInformation(tvNameAndAddress)
+        console.log(tvNameAndAddress);
+        return tvNameAndAddress;
+    }
+
+}
+
+/**
+ *  
+ * Parser urządzeń ze strony Euro AGD RTV 
+ */
+
+class DeviceListEuroRtvAgdParser extends DeviceListParser {
+
+    constructor() {
+        super();
+    }
+
+    parse(html) {
+        const $ = cheerio.load(html);
+
+        let attrProductName = $("div.list div.product-box.js-UA-product");
+        let nameDiv = $("div.list div.product-box.js-UA-product h2.product-name");
+
+        for (let i = 0; i < attrProductName.length - 1; i++) {
+
+            let productName = attrProductName[i].attribs;
+            let name = nameDiv[i].children[1].children[0].nodeValue.trim();
+
+            address = 'https://www.euro.com.pl' + productName['data-product-href'];
+            tvNameAndAddress.push({ i, name, address });
+        }
+        //getPowerInformation(tvNameAndAddress);
+        console.log(tvNameAndAddress);
+        return tvNameAndAddress;
+    }
+}
+
+/**
  * 
- * 
+ * Utworzenie tablicy z adresami URL i nazwami urządzeń 
  */
 class DeviceListUrlScrapper {
     constructor(domain) {
         this.domain = domain;
+        console.log(this.domain);
         // this.pageNumber = pageNumber;
 
         // this.url = domain + pageNumber;
@@ -96,20 +187,25 @@ class DeviceListUrlScrapper {
     getMarketName() {
 
         //@todo detekcja sklepu na podstawie domeny
-        switch (this.domain) {
+        let urlType;
+        if (this.domain.includes("mediamarkt")) urlType = 'mediamarkt';
+        else if (this.domain.includes('mediaexpert')) urlType = 'mediaexpert';
+        else if (this.domain.includes('eurortvagd')) urlType = 'eurortvagd';
 
-            case 'https://mediamarkt.pl':
-                console.log('media markt here')
+        switch (urlType) {
+
+            case 'mediamarkt':
+                console.log('media markt here');
                 return 'mediamarkt';
                 break;
 
-            case 'https://www.mediaexpert.pl':
-                console.log('media expert here')
+            case 'mediaexpert':
+                console.log('media expert here');
                 return 'mediaexpert';
                 break;
 
-            case 'https://www.euro.com.pl':
-                console.log('euro rtv agd here')
+            case 'eurortvagd':
+                console.log('euro rtv agd here');
                 return 'eurortvagd';
                 break;
         }
@@ -117,23 +213,27 @@ class DeviceListUrlScrapper {
     }
 
     getNameAndAddresses() {
-        rp(this.domain)
-            .then((html) => {
-                return DeviceListParser.create(this.market).parse(html);
-            })
-            .catch((error) => {
-                throw error;
-            });
+        return new Promise((resolve, reject) => {
+            rp(this.domain)
+                .then((html) => {
+                    resolve(DeviceListParser.create(this.market).parse(html))
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
     }
 }
 
-//DeviceListParser.create("mediaexpert").parse("gajsdfh ksadfkjahskdfhaksjdf");
-const mm = 'https://mediamarkt.pl'
+const mm = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
+const me = 'https://www.mediaexpert.pl/telewizory/';
+const era = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=mainnavi';
 
-const dp = new DeviceListUrlScrapper(mm);
+// const dp = new DeviceListUrlScrapper(mm + pageNumber);
 
-dp.getNameAndAddresses().then(result => {
-    console.log(">>> ", result);
-})
+// dp.getNameAndAddresses()
+//     .then(result => {
+//         console.log("result >>> ", result);
+//     })
 
 module.exports = { DeviceListUrlScrapper }
