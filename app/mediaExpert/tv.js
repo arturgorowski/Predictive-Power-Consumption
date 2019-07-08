@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 var rp = require('request-promise');
+const DeviceListUrlScrapper = require('../app').DeviceListUrlScrapper
 
 // get all tv url 
 //$("div.list div").map((k,v)=> `https://www.euro.com.pl${$(v).attr("data-product-href")}`)
@@ -14,43 +15,51 @@ const url = 'https://www.mediaexpert.pl/telewizory/';
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1;
 
-const getNameAndAddressesTv = () => {
-    rp(url)
-        .then((html) => {
-            parseResponseHtmlNameAddress(html)
-        })
-        .catch((error) => {
-            throw error
-        })
-}
-getNameAndAddressesTv();
+const request = new DeviceListUrlScrapper(url);
 
-function parseResponseHtmlNameAddress(html) {
-    const $ = cheerio.load(html);
+request.getNameAndAddresses()
+    .then(result => {
+        console.log("result >>> ", result);
+        getPowerInformation(result)
+    })
 
-    let attrProductName = $("div.c-offerBox_header.clearfix2 a")
-    // $("div.c-offerBox_header.clearfix2 a").map((k,v)=> `https://mediaexpert.pl${$(v).attr("href")}`)
-    //let page = $("a.m-pagination_item.m-pagination_next")
+// const getNameAndAddressesTv = () => {
+//     rp(url)
+//         .then((html) => {
+//             parseResponseHtmlNameAddress(html)
+//         })
+//         .catch((error) => {
+//             throw error
+//         })
+// }
+// getNameAndAddressesTv();
 
-    for (let i = 0; i < attrProductName.length - 1; i++) {
+// function parseResponseHtmlNameAddress(html) {
+//     const $ = cheerio.load(html);
 
-        let productName = attrProductName[i].attribs;
-        if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
-            name = productName.title;
-            address = 'https://mediaexpert.pl' + productName.href
-            tvNameAndAddress.push({ i, name, address })
+//     let attrProductName = $("div.c-offerBox_header.clearfix2 a")
+//     // $("div.c-offerBox_header.clearfix2 a").map((k,v)=> `https://mediaexpert.pl${$(v).attr("href")}`)
+//     //let page = $("a.m-pagination_item.m-pagination_next")
 
-        } else {
-            productName = attrProductName[i + 1].attribs
-        }
-    }
-    // if (page.length > 0) {
-    //     pageNumber++
-    //     getPowerInformation(tvNameLink)
-    // }
-    getPowerInformation(tvNameAndAddress)
-    console.log(tvNameAndAddress)
-}
+//     for (let i = 0; i < attrProductName.length - 1; i++) {
+
+//         let productName = attrProductName[i].attribs;
+//         if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
+//             name = productName.title;
+//             address = 'https://mediaexpert.pl' + productName.href
+//             tvNameAndAddress.push({ i, name, address })
+
+//         } else {
+//             productName = attrProductName[i + 1].attribs
+//         }
+//     }
+//     // if (page.length > 0) {
+//     //     pageNumber++
+//     //     getPowerInformation(tvNameLink)
+//     // }
+//     getPowerInformation(tvNameAndAddress)
+//     console.log(tvNameAndAddress)
+// }
 
 let addresses = []
 function getPowerInformation(tvNameAddress) {
@@ -109,11 +118,12 @@ function parseResponseHtml(html) {
             //console.log("power node >>>", powerNode, "length", powerNode.length);
 
             let startIdx = $("h2:contains('Efektywność energetyczna')").parent("td").parent("tr").index();
+
             energyClass = powerNode[startIdx+1].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
             powerConsumption = powerNode[startIdx+2].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
             powerConsumptionStandby = powerNode[startIdx+3].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
             annualEnergyConsumption = powerNode[startIdx+4].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
-            powerType = powerNode[startIdx+5].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
+            //powerType = powerNode[startIdx+5].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
 
             //console.log(energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, powerType)
 
@@ -124,7 +134,7 @@ function parseResponseHtml(html) {
                 powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
-                powerType
+                //powerType
             })
             id++
         }

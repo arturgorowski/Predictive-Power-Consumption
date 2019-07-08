@@ -65,9 +65,9 @@ getPowerInformation = (tvNameAndAddress) => {
         addresses.push(address.address)
     })
 
-    console.log("addresses:", addresses)
+    //console.log("addresses:", addresses)
     let promises = addresses.map(url => {
-        console.log(">>> url", url)
+        //console.log(">>> url", url)
         return new Promise((resolve, reject) => {
             rp(url)
                 .then((response) => {
@@ -121,15 +121,15 @@ function parseResponseHtml(html) {
             let powerConsumptionIndex = $("td:contains('Pobór mocy IEC 62087 Ed.2 (tryb włączenia)')").parent("tr").index();
             let powerConsumptionStandbyIndex = $("td:contains('Pobór mocy (tryb czuwania)')").parent("tr").index();
             let annualEnergyConsumptionIndex = $("td:contains('Roczne zużycie energii')").parent("tr").index();
-            let powerTypeIndex = $("td:contains('Zasilanie')").parent("tr").index();
+            //let powerTypeIndex = $("td:contains('Zasilanie')").parent("tr").index();
 
             energyClass = powerNode[energyClassIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
             powerConsumption = powerNode[powerConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
             powerConsumptionStandby = powerNode[powerConsumptionStandbyIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
             annualEnergyConsumption = powerNode[annualEnergyConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            powerTypeIndex > 1 ? powerType = powerNode[powerTypeIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() : powerType = 'no data'
+            //powerTypeIndex > annualEnergyConsumptionIndex ? powerType = powerNode[powerTypeIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() : powerType = 'no data'
 
-            console.log(i, "--",energyClass,"--", powerConsumption,"--", powerConsumptionStandby,"--", annualEnergyConsumption,"--", powerType)
+            //console.log(i, "--",energyClass,"--", powerConsumption,"--", powerConsumptionStandby,"--", annualEnergyConsumption,"--", powerType)
 
             data.push({
                 id,
@@ -138,7 +138,7 @@ function parseResponseHtml(html) {
                 powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
-                powerType
+                //powerType
             })
             id++
         }
@@ -147,5 +147,5 @@ function parseResponseHtml(html) {
         throw error
     }
     console.log(">>> data", data)
-    console.timeEnd("timer")
+    //console.timeEnd("timer")
 }

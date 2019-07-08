@@ -51,48 +51,49 @@ class DeviceListMediaMarktParser extends DeviceListParser {
         let attrProductName = $("a.js-product-name");
         let page = $("a.m-pagination_item.m-pagination_next");
 
-        // for (let i = 0; i < attrProductName.length - 1; i++) {
+        for (let i = 0; i < attrProductName.length - 1; i++) {
 
-        //     let productName = attrProductName[i].attribs;
-        //     if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
-        //         name = productName.title;
-        //         address = 'https://mediamarkt.pl' + productName.href;
-        //         tvNameAndAddress.push({ i, name, address });
+            let productName = attrProductName[i].attribs;
+            if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
+                name = productName.title;
+                address = 'https://mediamarkt.pl' + productName.href;
+                tvNameAndAddress.push({ id : iterator, name, address });
+                iterator++
 
-        //     } else {
-        //         productName = attrProductName[i + 1].attribs;
-        //     }
-        // }
-        let iter = 1
-        if (iterator <= page.length) {
-            pageNumber++
-            iterator++
-            for (let i = 0; i < attrProductName.length - 1; i++) {
-
-                let productName = attrProductName[i].attribs;
-                if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
-                    name = productName.title;
-                    address = 'https://mediamarkt.pl' + productName.href;
-                    tvNameAndAddress.push({ iter, name, address });
-                    iter++
-
-                } else {
-                    productName = attrProductName[i + 1].attribs;
-                }
+            } else {
+                productName = attrProductName[i + 1].attribs;
             }
-
-            const recursion = new DeviceListUrlScrapper(mm + pageNumber);
-            recursion.getNameAndAddresses()
-                .then(result => {
-                    console.log("result >>> ", result);
-                })
-
         }
+        // let iter = 1;
+        // if (iterator <= page.length) {
+        //     pageNumber++;
+        //     iterator++;
+        //     for (let i = 0; i < attrProductName.length - 1; i++) {
 
-        //console.log("tablica adresow >>>", tvNameAndAddress);
-        else return tvNameAndAddress;
+        //         let productName = attrProductName[i].attribs;
+        //         if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
+        //             name = productName.title;
+        //             address = 'https://mediamarkt.pl' + productName.href;
+        //             tvNameAndAddress.push({ iter, name, address });
+        //             iter++
+
+        //         } else {
+        //             productName = attrProductName[i + 1].attribs;
+        //         }
+        //     }
+
+        //     const recursion = new DeviceListUrlScrapper(mm + pageNumber);
+        //     recursion.getNameAndAddresses()
+        //         .then(result => {
+        //             console.log("result >>> ", result);
+        //             tvNameAndAddress.push(result)
+        //         })
+
+        // }
+
+        console.log("tablica adresow >>>", tvNameAndAddress);
+        return tvNameAndAddress;
     }
-
 }
 
 /**
@@ -119,8 +120,8 @@ class DeviceListMediaExpertParser extends DeviceListParser {
             if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
                 name = productName.title;
                 address = 'https://mediaexpert.pl' + productName.href;
-                tvNameAndAddress.push({ i, name, address });
-
+                tvNameAndAddress.push({ id: iterator, name, address });
+                iterator++
             } else {
                 productName = attrProductName[i + 1].attribs;
             }
@@ -130,7 +131,7 @@ class DeviceListMediaExpertParser extends DeviceListParser {
         //     getPowerInformation(tvNameAndAddress)
         // }
         //getPowerInformation(tvNameAndAddress)
-        console.log(tvNameAndAddress);
+        console.log("tablica adresow >>>", tvNameAndAddress);
         return tvNameAndAddress;
     }
 
@@ -159,10 +160,11 @@ class DeviceListEuroRtvAgdParser extends DeviceListParser {
             let name = nameDiv[i].children[1].children[0].nodeValue.trim();
 
             address = 'https://www.euro.com.pl' + productName['data-product-href'];
-            tvNameAndAddress.push({ i, name, address });
+            tvNameAndAddress.push({ id: iterator, name, address });
+            iterator++;
         }
         //getPowerInformation(tvNameAndAddress);
-        console.log(tvNameAndAddress);
+        console.log("tablica adresow >>>", tvNameAndAddress);
         return tvNameAndAddress;
     }
 }
@@ -190,7 +192,7 @@ class DeviceListUrlScrapper {
         let urlType;
         if (this.domain.includes("mediamarkt")) urlType = 'mediamarkt';
         else if (this.domain.includes('mediaexpert')) urlType = 'mediaexpert';
-        else if (this.domain.includes('eurortvagd')) urlType = 'eurortvagd';
+        else if (this.domain.includes('euro')) urlType = 'eurortvagd';
 
         switch (urlType) {
 
