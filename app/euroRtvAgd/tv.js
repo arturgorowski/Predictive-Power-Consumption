@@ -8,7 +8,6 @@ const DeviceListUrlScrapper = require('../app').DeviceListUrlScrapper
  * 
  */
 
-
 const data = [];
 let energyClass = '',
     powerConsumption = '',
@@ -17,95 +16,23 @@ let energyClass = '',
     powerType;
 
 const url = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=mainnavi';
-const tvNameAndAddress = [];
-let name, address, pageNumber = 1;
 
 const request = new DeviceListUrlScrapper(url);
 
-request.getNameAndAddresses()
+request.getScrapperHtmlTab()
     .then(result => {
-        console.log("result >>> ", result);
-        getPowerInformation(result)
+        //console.log(result)
+        parseResponseHtml(result)
+    })
+    .catch(error => {
+        return error
     })
 
-// const getNameAndAddressesTv = () => {
-//     rp(url)
-//         .then((html) => {
-//             console.time("timer")
-//             parseResponseHtmlNameAddress(html)
-//         })
-//         .catch((error) => {
-//             throw error
-//         })
-// }
-// getNameAndAddressesTv();
-
-// function parseResponseHtmlNameAddress(html) {
-//     const $ = cheerio.load(html);
-
-//     let attrProductName = $("div.list div.product-box.js-UA-product")
-//     let nameDiv = $("div.list div.product-box.js-UA-product h2.product-name")
-    
-//     for (let i = 0; i < attrProductName.length - 1; i++){
-
-//         let productName = attrProductName[i].attribs;
-       
-//             let name = nameDiv[i].children[1].children[0].nodeValue.trim()
-//             address = 'https://www.euro.com.pl' + productName['data-product-href']
-//             tvNameAndAddress.push({ i, name, address })
-//     }
-//     getPowerInformation(tvNameAndAddress);
-//     console.log(tvNameAndAddress)
-// }
-
-let addresses = []
-getPowerInformation = (tvNameAndAddress) => {
-
-    tvNameAndAddress.forEach((address) => {
-        addresses.push(address.address)
-    })
-
-    //console.log("addresses:", addresses)
-    let promises = addresses.map(url => {
-        //console.log(">>> url", url)
-        return new Promise((resolve, reject) => {
-            rp(url)
-                .then((response) => {
-                    resolve(response)
-                    //console.log(response)
-                })
-                .catch((err) => {
-                    reject(err)
-                })
-        });
-    })
-
-    //console.log(promises)
-    promises.reduce((promiseChain, currentTask) => {
-        return promiseChain
-            .then(chainResults => currentTask
-                .then(currentResult => chainResults = chainResults
-                    .concat(currentResult)
-                )
-            );
-    }, Promise.resolve(promises))
-        .then(htmlBody => {
-            //console.log(">>> htmlBody", htmlBody);
-            parseResponseHtml(htmlBody)
-            //return htmlBody;
-        }).then(model => {
-            //console.log(">>> model ", model);
-            return model;
-        }).catch(err => {
-            console.error(">>> ERR :: ", err);
-            return err;
-        });
-}
-
+let id = 1;
 function parseResponseHtml(html) {
     try {
         let len = (html.length) / 2;
-        let id = 1;
+
         for (let i = len; i < html.length; i++) {
             const $ = cheerio.load(html[i])
             //console.log(html)

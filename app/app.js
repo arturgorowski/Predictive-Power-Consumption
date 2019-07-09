@@ -2,7 +2,8 @@ const cheerio = require('cheerio');
 let rp = require('request-promise');
 
 const tvNameAndAddress = [];
-let name, address, pageNumber = 1, iterator = 0;
+let name, address, pageNumber = 1, iterator = 0, urlList = [], domainName, baseDomainName;
+let addresses = []
 
 /**
  *  
@@ -12,10 +13,57 @@ class DeviceListParser {
 
     constructor() {
         console.log("HELLO FROM :: DeviceListParser");
+    }
 
+    /**
+     * 
+     * przyjmuje tablice listy urządzeń i tworzy tablice obiektów HTML poszczególnych urządzeń
+     */
+    getScrapperList(tvNameAndAddress) {
+
+        tvNameAndAddress.forEach((address) => {
+            addresses.push(address.address)
+        })
+        //console.log("addresses:", addresses)
+        let promises = addresses.map(url => {
+            //console.log(">>> url", url)
+            return new Promise((resolve, reject) => {
+                rp(url)
+                    .then((response) => {
+                        resolve(response)
+                    })
+                    .catch((err) => {
+                        reject(err)
+                    })
+            });
+        })
+
+        return promises.reduce((promiseChain, currentTask) => {
+            return promiseChain
+                .then(chainResults => currentTask
+                    .then(currentResult => chainResults = chainResults
+                        .concat(currentResult)
+                    )
+                )
+                .catch(err => {
+                    return err;
+                });
+        }, Promise.resolve(promises))
+            .then(htmlBody => {
+                console.log(">>> htmlBody", htmlBody);
+                return htmlBody;
+            })
+            .catch(err => {
+                console.error(">>> ERR :: ", err);
+                return err;
+            });
     }
 }
 
+/**
+ * 
+ * Stworzenie obiektu parsera dla konkretnego urządzenia
+ */
 DeviceListParser.create = (market) => {
 
     switch (market) {
@@ -34,11 +82,12 @@ DeviceListParser.create = (market) => {
     }
 }
 
+const listScrapper = new DeviceListParser();
+
 /**
  * 
  * Parser urządzeń ze strony Media Markt 
  */
-
 class DeviceListMediaMarktParser extends DeviceListParser {
 
     constructor() {
@@ -47,52 +96,64 @@ class DeviceListMediaMarktParser extends DeviceListParser {
 
     parse(html) {
         const $ = cheerio.load(html);
-
-        let attrProductName = $("a.js-product-name");
         let page = $("a.m-pagination_item.m-pagination_next");
 
-        for (let i = 0; i < attrProductName.length - 1; i++) {
-
-            let productName = attrProductName[i].attribs;
-            if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
-                name = productName.title;
-                address = 'https://mediamarkt.pl' + productName.href;
-                tvNameAndAddress.push({ id : iterator, name, address });
-                iterator++
-
-            } else {
-                productName = attrProductName[i + 1].attribs;
-            }
+        for (let i = pageNumber; i <= page.length + 1; i++) {
+            let url = baseDomainName + pageNumber
+            urlList.push({ url })
+            pageNumber++
         }
-        // let iter = 1;
-        // if (iterator <= page.length) {
-        //     pageNumber++;
-        //     iterator++;
-        //     for (let i = 0; i < attrProductName.length - 1; i++) {
 
-        //         let productName = attrProductName[i].attribs;
-        //         if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href) {
-        //             name = productName.title;
-        //             address = 'https://mediamarkt.pl' + productName.href;
-        //             tvNameAndAddress.push({ iter, name, address });
-        //             iter++
+        let promises = urlList.map(url => {
+            return new Promise((resolve, reject) => {
+                rp(url)
+                    .then(response => {
+                        resolve(response)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
+            })
+        })
 
-        //         } else {
-        //             productName = attrProductName[i + 1].attribs;
-        //         }
-        //     }
+        return promises.reduce((promiseChain, currentTask) => {
+            return promiseChain
+                .then(chainResults => currentTask
+                    .then(currentResult => chainResults = chainResults
+                        .concat(currentResult)
+                    )
+                );
+        }, Promise.resolve(promises))
+            .then(htmlBody => {
+                //console.log(">>> htmlBody", htmlBody);
 
-        //     const recursion = new DeviceListUrlScrapper(mm + pageNumber);
-        //     recursion.getNameAndAddresses()
-        //         .then(result => {
-        //             console.log("result >>> ", result);
-        //             tvNameAndAddress.push(result)
-        //         })
+                htmlBody.forEach(html => {
+                    const $ = cheerio.load(html);
+                    let attrProductName = $("a.js-product-name");
 
-        // }
+                    for (let k = 0; k < attrProductName.length - 1; k++) {
 
-        console.log("tablica adresow >>>", tvNameAndAddress);
-        return tvNameAndAddress;
+                        let productName = attrProductName[k].attribs;
+                        if (attrProductName[k].attribs.href !== attrProductName[k + 1].attribs.href) {
+                            name = productName.title;
+                            address = 'https://mediamarkt.pl' + productName.href;
+                            tvNameAndAddress.push({ id: iterator, name, address });
+                            iterator++
+
+                        } else {
+                            productName = attrProductName[k + 1].attribs;
+                        }
+                    }
+                    
+                })
+                console.log("tablica nazw i adresów adresow >>>", tvNameAndAddress);
+                return tvNameAndAddress;
+
+            })
+            .catch(err => {
+                console.error(">>> ERR :: ", err);
+                return err;
+            });
     }
 }
 
@@ -100,7 +161,6 @@ class DeviceListMediaMarktParser extends DeviceListParser {
  * 
  * Parser urządzeń ze strony Media Expert 
  */
-
 class DeviceListMediaExpertParser extends DeviceListParser {
 
     constructor() {
@@ -130,18 +190,16 @@ class DeviceListMediaExpertParser extends DeviceListParser {
         //     pageNumber++
         //     getPowerInformation(tvNameAndAddress)
         // }
-        //getPowerInformation(tvNameAndAddress)
-        console.log("tablica adresow >>>", tvNameAndAddress);
+
+        console.log("tablica nazw i adresów adresow >>>", tvNameAndAddress);
         return tvNameAndAddress;
     }
-
 }
 
 /**
  *  
  * Parser urządzeń ze strony Euro AGD RTV 
  */
-
 class DeviceListEuroRtvAgdParser extends DeviceListParser {
 
     constructor() {
@@ -163,8 +221,8 @@ class DeviceListEuroRtvAgdParser extends DeviceListParser {
             tvNameAndAddress.push({ id: iterator, name, address });
             iterator++;
         }
-        //getPowerInformation(tvNameAndAddress);
-        console.log("tablica adresow >>>", tvNameAndAddress);
+
+        console.log("tablica nazw i adresów adresow >>>", tvNameAndAddress);
         return tvNameAndAddress;
     }
 }
@@ -174,8 +232,10 @@ class DeviceListEuroRtvAgdParser extends DeviceListParser {
  * Utworzenie tablicy z adresami URL i nazwami urządzeń 
  */
 class DeviceListUrlScrapper {
+
     constructor(domain) {
         this.domain = domain;
+        baseDomainName = this.domain;
         console.log(this.domain);
         // this.pageNumber = pageNumber;
 
@@ -183,9 +243,12 @@ class DeviceListUrlScrapper {
 
         // is mediamarkt, mediaexpert
         this.market = this.getMarketName();
-
     }
 
+    /**
+     * 
+     * ustalenie nazwy marketu
+     */
     getMarketName() {
 
         //@todo detekcja sklepu na podstawie domeny
@@ -198,25 +261,49 @@ class DeviceListUrlScrapper {
 
             case 'mediamarkt':
                 console.log('media markt here');
+                domainName = this.domain + pageNumber
                 return 'mediamarkt';
                 break;
 
             case 'mediaexpert':
                 console.log('media expert here');
+                domainName = this.domain
                 return 'mediaexpert';
                 break;
 
             case 'eurortvagd':
                 console.log('euro rtv agd here');
+                domainName = this.domain
                 return 'eurortvagd';
                 break;
         }
 
     }
 
+    /**
+     * 
+     * utworzenie tablicy obiektów HTML na podstawie listy urządzeń
+     */
+    getScrapperHtmlTab() {
+        return new Promise((resolve, reject) => {
+            this.getNameAndAddresses()
+                .then(response => {
+                    //console.log("response <<<", response)
+                    resolve(listScrapper.getScrapperList(response))
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+
+    /**
+     * 
+     * na podstawie strony bazowej sklepu(media markt/media expert/euro rtv agd) stworzenie listy urządzeń
+     */
     getNameAndAddresses() {
         return new Promise((resolve, reject) => {
-            rp(this.domain)
+            rp(domainName)
                 .then((html) => {
                     resolve(DeviceListParser.create(this.market).parse(html))
                 })
@@ -227,15 +314,24 @@ class DeviceListUrlScrapper {
     }
 }
 
-const mm = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
-const me = 'https://www.mediaexpert.pl/telewizory/';
-const era = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=mainnavi';
+// const request = new DeviceListUrlScrapper(mm);
 
-// const dp = new DeviceListUrlScrapper(mm + pageNumber);
-
-// dp.getNameAndAddresses()
+// request.getNameAndAddresses()
 //     .then(result => {
-//         console.log("result >>> ", result);
+//         console.log("result <<<", result)
+//         listScrapper.getScrapperList(result)
+//     })
+//     .catch(err => {
+//         console.log(err);
+//         return err;
+//     })
+
+// request.getScrapperHtmlTab()
+//     .then(result => {
+//         console.log(result)
+//     })
+//     .catch(error => {
+//         return error
 //     })
 
 module.exports = { DeviceListUrlScrapper }
