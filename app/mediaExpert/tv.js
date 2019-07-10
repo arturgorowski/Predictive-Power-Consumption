@@ -11,8 +11,7 @@ let energyClass = '',
     annualEnergyConsumption = '',
     powerType;
 
-const url = 'https://www.mediaexpert.pl/telewizory/';
-
+const url = 'https://www.mediaexpert.pl/telewizory?per_page=50&start=';
 const request = new DeviceListUrlScrapper(url);
 
 request.getScrapperHtmlTab()
@@ -67,4 +66,5 @@ function parseResponseHtml(html) {
         throw error
     }
     console.log(">>> data", data)
+    console.timeEnd("get mediaExpert data")
 }

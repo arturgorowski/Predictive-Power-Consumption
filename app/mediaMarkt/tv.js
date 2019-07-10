@@ -16,7 +16,7 @@ const request = new DeviceListUrlScrapper(url);
 
 request.getScrapperHtmlTab()
     .then(result => {
-        console.log(result)
+        //console.log(result)
         parseResponseHtml(result)
     })
     .catch(error => {
@@ -58,6 +58,7 @@ const parseResponseHtml = (html) => {
                 annualEnergyConsumption,
                 powerType
             })
+            console.log(id, ":",data)
 
             id++
         }
@@ -65,4 +66,5 @@ const parseResponseHtml = (html) => {
         throw error
     }
     console.log(">>> data", data)
+    console.timeEnd("get mediaMarkt data")
 }

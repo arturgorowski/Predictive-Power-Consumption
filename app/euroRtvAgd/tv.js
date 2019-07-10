@@ -74,5 +74,5 @@ function parseResponseHtml(html) {
         throw error
     }
     console.log(">>> data", data)
-    //console.timeEnd("timer")
+    console.timeEnd("get euroRtvAgd data")
 }
