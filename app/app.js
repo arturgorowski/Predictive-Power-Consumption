@@ -26,6 +26,17 @@ class DeviceListParser {
      */
     getScrapperList(tvNameAndAddress) {
 
+        // let mediaMarktPopped = tvNameAndAddress.pop();
+        // let mediaExpertPopped = tvNameAndAddress.pop();
+        // let euroRtvAgdPopped = tvNameAndAddress.pop();
+        // let trash = tvNameAndAddress.pop();
+
+        // for (let i = 0; i < mediaExpertPopped.length; i++) {
+        //     if (mediaMarktPopped[i] !== undefined) tvNameAndAddress.push(mediaMarktPopped[i]);
+        //     if (mediaExpertPopped[i] !== undefined) tvNameAndAddress.push(mediaExpertPopped[i]);
+        //     if (euroRtvAgdPopped[i] !== undefined) tvNameAndAddress.push(euroRtvAgdPopped[i]);
+        // }
+
         tvNameAndAddress.forEach((address) => {
             addresses.push(address.address)
         })
@@ -37,34 +48,29 @@ class DeviceListParser {
             }).catch((error) => {
                 return error
             })
-
         })
 
         return promises.reduce((promiseChain, currentTask) => {
             return promiseChain
                 .then(chainResults => currentTask
                     .then(currentResult => chainResults = chainResults
-                        .concat(currentResult)
-                    )
-                )
-                .catch(err => {
+                        .concat(currentResult))
+                ).catch(err => {
                     return err;
                 });
-        }, Promise.resolve(promises))
-            .then(htmlBody => {
-                //console.log(">>> htmlBody", htmlBody.length);
-                return htmlBody;
-            })
-            .catch(err => {
-                console.error(">>> ERR :: ", err);
-                return err;
-            });
+        }, Promise.resolve(promises)).then(htmlBody => {
+            //console.log(">>> htmlBody", htmlBody.length);
+            return htmlBody;
+        }).catch(err => {
+            console.error(">>> ERR :: ", err);
+            return err;
+        });
     }
 }
 
 /**
  * 
- * Stworzenie obiektu parsera dla konkretnego urządzenia
+ * wybór parsera dla konkretnego urządzenia
  */
 DeviceListParser.create = (market) => {
 
@@ -136,22 +142,19 @@ class DeviceListUrlScrapper {
                 return 'eurortvagd';
                 break;
         }
-
     }
 
     /**
      * 
-     * utworzenie tablicy obiektów HTML na podstawie listy urządzeń
+     * na podstawie listy urządzeń(nazwa + adres URI) stworzenie tablicy obiektów <html...>
      */
     getScrapperHtmlTab() {
-        return this.getNameAndAddresses()
-            .then(response => {
-                return allUrlData.push(response), console.log('tab of all uri', allUrlData)
-                //return listScrapper.getScrapperList(response);
-            })
-            .catch(error => {
-                return error;
-            })
+        return this.getNameAndAddresses().then(response => {
+            //return allUrlData.push(response), console.log('tab of all uri', allUrlData);
+            return listScrapper.getScrapperList(allUrlData.push(response));
+        }).catch(error => {
+            return error;
+        })
     }
 
     /**
@@ -164,7 +167,6 @@ class DeviceListUrlScrapper {
         }).catch((error) => {
             return error;
         })
-
     }
 }
 

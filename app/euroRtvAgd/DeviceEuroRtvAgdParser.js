@@ -1,9 +1,8 @@
 const cheerio = require('cheerio');
 let rp = require('request-promise');
-let DeviceListParser = require('../app').DeviceListParser;
 
 const tvNameAndAddress = [];
-let name, address, pageNumber = 1, iterator = 0, urlList = [];
+let address, pageNumber = 1, iterator = 0, urlList = [];
 let baseDomainName = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe,strona-';
 
 /**
@@ -60,7 +59,7 @@ class DeviceListEuroRtvAgdParser {
                     }
 
                 })
-                console.log("tablica nazw i adresów adresow >>>", tvNameAndAddress);
+                //console.log("tablica nazw i adresów adresow >>>", tvNameAndAddress);
                 return tvNameAndAddress;
 
             })

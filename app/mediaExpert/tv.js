@@ -8,8 +8,7 @@ const data = [];
 let energyClass = '',
     powerConsumption = '',
     powerConsumptionStandby = '',
-    annualEnergyConsumption = '',
-    powerType;
+    annualEnergyConsumption = '';
 
 const url = 'https://www.mediaexpert.pl/telewizory?per_page=50&start=';
 const request = new DeviceListUrlScrapper(url);

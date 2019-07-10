@@ -6,8 +6,7 @@ const data = [];
 let energyClass = '',
     powerConsumption = '',
     powerConsumptionStandby = '',
-    annualEnergyConsumption = '',
-    powerType;
+    annualEnergyConsumption = '';
 
 const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 // const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory';
@@ -45,7 +44,7 @@ const parseResponseHtml = (html) => {
                     if (dt === 'Pobór mocy (IEC 62087 Edition 2) [W]') powerConsumption = Number($(item).find("dd").text().trim())
                     if (dt === 'Pobór mocy w trybie czuwania [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim())
                     if (dt === 'Roczne zużycie energii [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim())
-                    if (dt === 'Rodzaj zasilania') powerType = $(item).find("dd").text().trim()
+                    //if (dt === 'Rodzaj zasilania') powerType = $(item).find("dd").text().trim()
                 }
             })
 
@@ -56,7 +55,7 @@ const parseResponseHtml = (html) => {
                 powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
-                powerType
+                //powerType
             })
             console.log(id, ":",data)
 

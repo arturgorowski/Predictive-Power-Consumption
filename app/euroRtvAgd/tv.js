@@ -12,8 +12,7 @@ const data = [];
 let energyClass = '',
     powerConsumption = '',
     powerConsumptionStandby = '',
-    annualEnergyConsumption = '',
-    powerType;
+    annualEnergyConsumption = '';
 
 const url = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=mainnavi';
 
