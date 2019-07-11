@@ -29,14 +29,28 @@ class DeviceListParser {
         tvNameAndAddress.forEach((address) => {
             addresses.push(address.address)
         })
-        //console.log("addresses:", addresses)
+
+        let it = 1;
         let promises = addresses.map(url => {
-            //console.log(">>> url", url)
-            return rp(url).then((response) => {
-                return response
-            }).catch((error) => {
-                return error
+            return new Promise((resolve, reject) => {
+                
+                setTimeout(function () {
+                    rp(url).then((response) => {
+                        console.log(it++)
+                        return resolve(response)
+                    }).catch((error) => {
+                        reject(error)
+                    });
+
+                }, 2 * 1000)
             })
+
+            // return rp(url).then((response) => {
+            //     console.log(it++)
+            //     return response
+            // }).catch((error) => {
+            //     return error
+            // })
         })
 
         return promises.reduce((promiseChain, currentTask) => {
@@ -79,7 +93,7 @@ DeviceListParser.create = (market) => {
     }
 }
 
-const listScrapper = new DeviceListParser();
+//const listScrapper = new DeviceListParser();
 
 /**
  * 
@@ -133,38 +147,16 @@ class DeviceListUrlScrapper {
         }
     }
 
-
-    createPoppedTab(response) {
-
-
-        console.log(response)
-        console.log(allUrlData)
-        allUrlData.push(response)
-        console.log("all data", allUrlData)
-
-        let pop1 = allUrlData.pop();
-        let pop2 = allUrlData.pop();
-        let pop3 = allUrlData.pop();
-
-        for (let i = 0; i < pop1.length; i++) {
-            if (pop1[i] !== undefined) allUrlData.push(pop1[i]);
-            if (pop2[i] !== undefined) allUrlData.push(pop2[i]);
-            if (pop3[i] !== undefined) allUrlData.push(pop3[i]);
-        }
-        
-        return allUrlData
-
-    }
-
     /**
      * 
      * na podstawie listy urządzeń(nazwa + adres URI) stworzenie tablicy obiektów <html...>
      */
     getScrapperHtmlTab() {
         return this.getNameAndAddresses().then(response => {
-            allUrlData.push(response), console.log('tab of all uri', allUrlData);
+            console.log(response)
             //return listScrapper.getScrapperList(response);
-            return this.getPoppedTab(allUrlData);
+            return response;
+
         }).catch(error => {
             return error;
         })
@@ -175,6 +167,7 @@ class DeviceListUrlScrapper {
      * na podstawie strony bazowej sklepu(media markt/media expert/euro rtv agd) stworzenie listy urządzeń (nazwa + adres URI)
      */
     getNameAndAddresses() {
+
         return rp(this.domain).then((html) => {
             return DeviceListParser.create(this.market).parse(html);
         }).catch((error) => {
