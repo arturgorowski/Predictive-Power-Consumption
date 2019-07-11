@@ -26,17 +26,6 @@ class DeviceListParser {
      */
     getScrapperList(tvNameAndAddress) {
 
-        // let mediaMarktPopped = tvNameAndAddress.pop();
-        // let mediaExpertPopped = tvNameAndAddress.pop();
-        // let euroRtvAgdPopped = tvNameAndAddress.pop();
-        // let trash = tvNameAndAddress.pop();
-
-        // for (let i = 0; i < mediaExpertPopped.length; i++) {
-        //     if (mediaMarktPopped[i] !== undefined) tvNameAndAddress.push(mediaMarktPopped[i]);
-        //     if (mediaExpertPopped[i] !== undefined) tvNameAndAddress.push(mediaExpertPopped[i]);
-        //     if (euroRtvAgdPopped[i] !== undefined) tvNameAndAddress.push(euroRtvAgdPopped[i]);
-        // }
-
         tvNameAndAddress.forEach((address) => {
             addresses.push(address.address)
         })
@@ -144,14 +133,38 @@ class DeviceListUrlScrapper {
         }
     }
 
+
+    createPoppedTab(response) {
+
+
+        console.log(response)
+        console.log(allUrlData)
+        allUrlData.push(response)
+        console.log("all data", allUrlData)
+
+        let pop1 = allUrlData.pop();
+        let pop2 = allUrlData.pop();
+        let pop3 = allUrlData.pop();
+
+        for (let i = 0; i < pop1.length; i++) {
+            if (pop1[i] !== undefined) allUrlData.push(pop1[i]);
+            if (pop2[i] !== undefined) allUrlData.push(pop2[i]);
+            if (pop3[i] !== undefined) allUrlData.push(pop3[i]);
+        }
+        
+        return allUrlData
+
+    }
+
     /**
      * 
      * na podstawie listy urządzeń(nazwa + adres URI) stworzenie tablicy obiektów <html...>
      */
     getScrapperHtmlTab() {
         return this.getNameAndAddresses().then(response => {
-            //return allUrlData.push(response), console.log('tab of all uri', allUrlData);
-            return listScrapper.getScrapperList(allUrlData.push(response));
+            allUrlData.push(response), console.log('tab of all uri', allUrlData);
+            //return listScrapper.getScrapperList(response);
+            return this.getPoppedTab(allUrlData);
         }).catch(error => {
             return error;
         })

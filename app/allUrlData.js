@@ -1,4 +1,4 @@
 let allUrlData = [];
 
 
-module.exports = [allUrlData]
+module.exports = allUrlData
