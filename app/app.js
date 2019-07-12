@@ -33,12 +33,18 @@ class DeviceListParser {
         let it = 1;
         let promises = addresses.map(url => {
             return new Promise((resolve, reject) => {
-                
+
                 setTimeout(function () {
+                    // let options = {
+                    //     method: 'GET',
+                    //     uri: url,
+                    //     proxy: 'http://104.25.114.28:80'
+                    // }
                     rp(url).then((response) => {
                         console.log(it++)
                         return resolve(response)
                     }).catch((error) => {
+                        console.log("ERR getScrapperList >>>", error)
                         reject(error)
                     });
 

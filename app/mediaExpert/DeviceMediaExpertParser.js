@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 let rp = require('request-promise');
 
 const tvNameAndAddress = [];
-let name, address, pageNumber = 0, iterator = 0, urlList = [];
+let name, address, pageNumber = 0, urlList = [];
 let baseDomainName = 'https://www.mediaexpert.pl/telewizory?per_page=20&start=';
 
 /**
@@ -38,7 +38,9 @@ class DeviceListMediaExpertParser {
                     .then(currentResult => chainResults = chainResults
                         .concat(currentResult)
                     )
-                );
+                ).catch(err => {
+                    return err;
+                });;
         }, Promise.resolve(promises)).then(htmlBody => {
             //console.log(">>> htmlBody", htmlBody);
             htmlBody.forEach(html => {
@@ -52,8 +54,7 @@ class DeviceListMediaExpertParser {
                     if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
                         name = productName.title;
                         address = 'https://mediaexpert.pl' + productName.href;
-                        tvNameAndAddress.push({ id: iterator, name, address });
-                        iterator++
+                        tvNameAndAddress.push({ name, address, shop: 'mediaExpert' });
                     } else {
                         productName = attrProductName[i + 1].attribs;
                     }

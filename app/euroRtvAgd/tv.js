@@ -1,4 +1,6 @@
 const cheerio = require('cheerio');
+let allData = require('../allUrlData');
+let dataCounter = require('../allUrlData');
 
 /**
  * get all tv url 
@@ -13,6 +15,11 @@ let energyClass = '',
     annualEnergyConsumption = '';
 
 //let id = 1;
+
+/**
+ * 
+ * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
+ */
 function parseResponseHtml(html) {
     try {
         // let len = (html.length) / 2;
@@ -43,8 +50,9 @@ function parseResponseHtml(html) {
 
         //console.log(i, "--",energyClass,"--", powerConsumption,"--", powerConsumptionStandby,"--", annualEnergyConsumption,"--", powerType)
 
-        data.push({
-            //id,
+        allData.push({
+            referral: "euroRtvAgd",
+            //id: dataCounter,
             productName,
             energyClass,
             powerConsumption,
@@ -52,13 +60,13 @@ function parseResponseHtml(html) {
             annualEnergyConsumption,
             //powerType
         })
-        //id++
-    //}
+        //dataCounter++
+        //}
 
     } catch (error) {
-    throw error
-}
-console.log(">>> data", data)
+        throw error
+    }
+    //console.log(">>> data RTV", data)
 }
 
 module.exports = { parseResponseHtml };

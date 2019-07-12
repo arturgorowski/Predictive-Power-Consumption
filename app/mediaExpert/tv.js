@@ -1,4 +1,5 @@
 const cheerio = require('cheerio');
+let allData = require('../allUrlData');
 
 // get all tv url 
 //$("div.list div").map((k,v)=> `https://www.euro.com.pl${$(v).attr("data-product-href")}`)
@@ -9,6 +10,10 @@ let energyClass = '',
     annualEnergyConsumption = '';
 
 //let id = 1;
+/**
+ * 
+ * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
+ */
 function parseResponseHtml(html) {
     try {
         // let len = (html.length) / 2;
@@ -36,8 +41,9 @@ function parseResponseHtml(html) {
 
         //console.log(energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, powerType)
 
-        data.push({
+        allData.push({
             //id,
+            referral: "mediaExpert",
             productName,
             energyClass,
             powerConsumption,
@@ -46,12 +52,12 @@ function parseResponseHtml(html) {
             //powerType
         })
         //id++
-    //}
+        //}
 
     } catch (error) {
-    throw error
-}
-console.log(">>> data", data)
+        throw error
+    }
+    //console.log(">>> data ME", data)
 }
 
 module.exports = { parseResponseHtml };

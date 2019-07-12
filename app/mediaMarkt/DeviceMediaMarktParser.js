@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 let rp = require('request-promise');
 
 const tvNameAndAddress = [];
-let name, address, pageNumber = 1, iterator = 0, urlList = [];
+let name, address, pageNumber = 1, urlList = [];
 let baseDomainName = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 
 /**
@@ -40,7 +40,9 @@ class DeviceListMediaMarktParser {
                     .then(currentResult => chainResults = chainResults
                         .concat(currentResult)
                     )
-                );
+                ).catch(err => {
+                    return err;
+                });;
         }, Promise.resolve(promises))
             .then(htmlBody => {
                 //console.log(">>> htmlBody", htmlBody);
@@ -55,8 +57,7 @@ class DeviceListMediaMarktParser {
                         if (attrProductName[k].attribs.href !== attrProductName[k + 1].attribs.href) {
                             name = productName.title;
                             address = 'https://mediamarkt.pl' + productName.href;
-                            tvNameAndAddress.push({ id: iterator, name, address });
-                            iterator++
+                            tvNameAndAddress.push({ name, address, shop: 'mediaMarkt' });
 
                         } else {
                             productName = attrProductName[k + 1].attribs;

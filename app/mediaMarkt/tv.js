@@ -1,4 +1,5 @@
 const cheerio = require('cheerio');
+let allData = require('../allUrlData');
 
 const data = [];
 let energyClass = '',
@@ -9,27 +10,11 @@ let energyClass = '',
 // const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 // const url = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory';
 
-// const request = new DeviceListUrlScrapper(url);
-
-// request.getScrapperHtmlTab()
-//     .then(result => {
-//         //console.log(result)
-//         parseResponseHtml(result)
-//     })
-//     .catch(error => {
-//         return error
-//     })
-
-// Promise.all([(new DeviceListUrlScrapper(url1)).getScrapperHtmlTab(), (new DeviceListUrlScrapper(url2)).getScrapperHtmlTab(),
-//     (new DeviceListUrlScrapper(url3)).getScrapperHtmlTab()]).then(promises=>{
-
-
-//             console.log(">>>> ALL PROMISES ENDED", promises)
-//             // poped tab
-
-//     })
-
 //let id = 1;
+/**
+ * 
+ * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
+ */
 const parseResponseHtml = (html) => {
     try {
         // let len = (html.length) / 2
@@ -56,8 +41,9 @@ const parseResponseHtml = (html) => {
             }
         })
 
-        data.push({
+        allData.push({
             //id,
+            referral: "mediaMarkt",
             tvName: attrProductName,
             energyClass,
             powerConsumption,
@@ -67,11 +53,11 @@ const parseResponseHtml = (html) => {
         })
 
         //id++
-    //}
+        //}
     } catch (error) {
-    throw error
-}
-console.log(">>> data", data)
+        throw error
+    }
+    //console.log(">>> data MM", data)
 }
 
 module.exports = { parseResponseHtml };

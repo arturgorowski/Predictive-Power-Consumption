@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 let rp = require('request-promise');
 
 const tvNameAndAddress = [];
-let address, pageNumber = 1, iterator = 0, urlList = [];
+let address, pageNumber = 1, urlList = [];
 let baseDomainName = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe,strona-';
 
 /**
@@ -38,7 +38,9 @@ class DeviceListEuroRtvAgdParser {
                     .then(currentResult => chainResults = chainResults
                         .concat(currentResult)
                     )
-                );
+                ).catch(err => {
+                    return err;
+                });;
         }, Promise.resolve(promises))
             .then(htmlBody => {
                 //console.log(">>> htmlBody", htmlBody);
@@ -54,8 +56,7 @@ class DeviceListEuroRtvAgdParser {
                         let name = nameDiv[i].children[1].children[0].nodeValue.trim();
 
                         address = 'https://www.euro.com.pl' + productName['data-product-href'];
-                        tvNameAndAddress.push({ id: iterator, name, address });
-                        iterator++;
+                        tvNameAndAddress.push({ name, address, shop: 'euroRtvAgd' });
                     }
 
                 })
