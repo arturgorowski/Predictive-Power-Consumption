@@ -1,16 +1,16 @@
-const DeviceListUrlScrapper = require('./app').DeviceListUrlScrapper;
-const DeviceListParser = require('./app').DeviceListParser;
-let allUrlData = require('./allUrlData');
+const DeviceListUrlScrapper = require('../app').DeviceListUrlScrapper;
+const DeviceListParser = require('../app').DeviceListParser;
+let allUrlData = require('../allUrlData');
 const mongoose = require('mongoose');
 
-const TvModel = require('./DAO/tvDAO').model;
+const TvModel = require('../DAO/tvDAO').model;
 mongoose.connect('mongodb://localhost/predictivePowerConsumption', { useNewUrlParser: true });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 
-let parseResponseHtmlMediaMarkt = require('./mediaMarkt/tv').parseResponseHtml;
-let parseResponseHtmlMediaExpert = require('./mediaExpert/tv').parseResponseHtml;
-let parseResponseHtmlEuroRtvAgd = require('./euroRtvAgd/tv').parseResponseHtml;
+let parseResponseHtmlMediaMarkt = require('../mediaMarkt/tv').parseResponseHtml;
+let parseResponseHtmlMediaExpert = require('../mediaExpert/tv').parseResponseHtml;
+let parseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/tv').parseResponseHtml;
 
 const url1 = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 const url2 = 'https://www.mediaexpert.pl/telewizory?per_page=50&start=';

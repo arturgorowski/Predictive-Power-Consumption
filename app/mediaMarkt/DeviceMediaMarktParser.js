@@ -3,8 +3,9 @@ let rp = require('request-promise');
 
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1, urlList = [];
-let baseDomainName = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
+//let baseDomainName = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 
+//let baseDomainName = 'https://mediamarkt.pl/agd/lodowki-i-zamrazarki?limit=100&page=';
 /**
  * 
  * Parser urządzeń ze strony Media Markt 
@@ -15,7 +16,7 @@ class DeviceListMediaMarktParser {
         //super();
     }
 
-    parse(html) {
+    parse(html, baseDomainName) {
         //console.time("get mediaMarkt data")
         const $ = cheerio.load(html);
         let page = $("a.m-pagination_item.m-pagination_next");

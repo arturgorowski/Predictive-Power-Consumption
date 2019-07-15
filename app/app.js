@@ -35,12 +35,17 @@ class DeviceListParser {
             return new Promise((resolve, reject) => {
 
                 setTimeout(function () {
-                    // let options = {
-                    //     method: 'GET',
-                    //     uri: url,
-                    //     proxy: 'http://104.25.114.28:80'
-                    // }
-                    rp(url).then((response) => {
+                    let options = {
+                        method: 'GET',
+                        uri: url,
+                        //proxy: 'http://77.119.237.96:40224',
+                        insecure: true,
+                        rejectUnauthorized: false,
+                        headers: {
+                            'User-Agent': 'Request-Promise'
+                        }
+                    }
+                    rp(options).then((response) => {
                         console.log(it++)
                         return resolve(response)
                     }).catch((error) => {
@@ -50,13 +55,6 @@ class DeviceListParser {
 
                 }, 2 * 1000)
             })
-
-            // return rp(url).then((response) => {
-            //     console.log(it++)
-            //     return response
-            // }).catch((error) => {
-            //     return error
-            // })
         })
 
         return promises.reduce((promiseChain, currentTask) => {
@@ -108,7 +106,9 @@ DeviceListParser.create = (market) => {
 class DeviceListUrlScrapper {
 
     constructor(domain) {
+        this.baseDomainName = domain
         this.domain = domain;
+        
 
         // is mediamarkt, mediaexpert
         this.market = this.getMarketName();
@@ -175,7 +175,7 @@ class DeviceListUrlScrapper {
     getNameAndAddresses() {
 
         return rp(this.domain).then((html) => {
-            return DeviceListParser.create(this.market).parse(html);
+            return DeviceListParser.create(this.market).parse(html, this.baseDomainName);
         }).catch((error) => {
             return error;
         })
