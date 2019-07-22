@@ -34,11 +34,19 @@ function parseResponseHtml(html) {
             //console.log("power node >>>", powerNode, "length", powerNode.length);
 
             let startIdx = $("h2:contains('Efektywność energetyczna')").parent("td").parent("tr").index();
+            let powerConsumptionIdx = $("td:contains('Pobór mocy (tryb włączenia)')").parent("tr").index();
+            let powerConsumptionStandbyIdx = $("td:contains('Pobór mocy (tryb czuwania)')").parent("tr").index();
+            let annualEnergyConsumptionIdx = $("td:contains('Roczne zużycie energii [kWh]')").parent("tr").index();
+
 
             energyClass = powerNode[startIdx + 1].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            powerConsumption = powerNode[startIdx + 2].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            powerConsumptionStandby = powerNode[startIdx + 3].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            annualEnergyConsumption = powerNode[startIdx + 4].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
+            // powerConsumption = powerNode[startIdx + 2].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+            // powerConsumptionStandby = powerNode[startIdx + 3].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+            // annualEnergyConsumption = powerNode[startIdx + 4].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
+
+            powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+            powerConsumptionStandby = powerNode[powerConsumptionStandbyIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+            annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
             //powerType = powerNode[startIdx+5].children.filter(item=>item.type === "tag")[1].children[0].nodeValue.trim()
 
             //console.log(energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, powerType)

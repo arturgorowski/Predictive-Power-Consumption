@@ -3,7 +3,7 @@ let rp = require('request-promise');
 
 const tvNameAndAddress = [];
 let address, pageNumber = 1, urlList = [];
-let baseDomainName = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe,strona-';
+//let baseDomainName = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe,strona-';
 
 /**
  *  
@@ -14,12 +14,13 @@ class DeviceListEuroRtvAgdParser {
     constructor() {
     }
 
-    parse(html) {
+    parse(html, baseDomainName) {
         const $ = cheerio.load(html);
-        let page = $("div.paging-numbers")[1].childNodes.length
+        let page = $("div.paging-numbers")[1].childNodes.length;
+        let newBaseDomainName = baseDomainName.slice(0, baseDomainName.length-20);
 
         for (let i = 1; i <= page + 1; i++) {
-            let url = baseDomainName + pageNumber + '.bhtml';
+            let url = newBaseDomainName + ',strona-' + pageNumber + '.bhtml';
             urlList.push({ url });
             pageNumber++;
         }

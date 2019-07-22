@@ -3,7 +3,7 @@ let rp = require('request-promise');
 
 const tvNameAndAddress = [];
 let name, address, pageNumber = 0, urlList = [];
-let baseDomainName = 'https://www.mediaexpert.pl/telewizory?per_page=20&start=';
+//let baseDomainName = 'https://www.mediaexpert.pl/telewizory?per_page=20&start=';
 
 /**
  * 
@@ -14,7 +14,7 @@ class DeviceListMediaExpertParser {
     constructor() {
     }
 
-    parse(html) {
+    parse(html, baseDomainName) {
         const $ = cheerio.load(html);
         let page = $("input.js-jumpToPage")[0].attribs['data-lpage']
 
@@ -46,12 +46,12 @@ class DeviceListMediaExpertParser {
             htmlBody.forEach(html => {
                 const $ = cheerio.load(html);
 
-                let attrProductName = $("div.c-offerBox_header.clearfix2 a");
+                let attrProductName = $("div.c-offerBox_header.clearfix2 h2.c-offerBox_title a");
 
                 for (let i = 0; i < attrProductName.length - 1; i++) {
 
                     let productName = attrProductName[i].attribs;
-                    if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href && attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click') {
+                    if (attrProductName[i].attribs.href !== attrProductName[i + 1].attribs.href /*&& attrProductName[i].attribs.class !== 'c-reviewStars_link under_off js-gtmEvent_click'*/) {
                         name = productName.title;
                         address = 'https://mediaexpert.pl' + productName.href;
                         tvNameAndAddress.push({ name, address, shop: 'mediaExpert' });

@@ -16,24 +16,24 @@ const parseResponseHtml = (html) => {
             const $ = cheerio.load(html)
             let div = $('div.m-offerShowData')
             let attrProductName = $("h1.m-typo.m-typo_primary").text().trim()
-            const powerNode = div[0].childNodes[3];
+            const powerNode = div[0].childNodes[11];
 
             powerNode.children.forEach((item, k) => {
                 if (item.type !== "text") {
 
                     let dt = $(item).find("dt").text().trim()
-                    if (dt === 'Klasa energetyczna') energyClass = $(item).find("dd").text().trim()
-                    if (dt === 'Zużycie energii [kWh/24h]') powerConsumption = Number($(item).find("dd").text().trim()) + ' [kWh/24h]';
-                    if (dt === 'Zużycie energii [kWh/rok]') annualEnergyConsumption = Number($(item).find("dd").text().trim()) + ' [kWh/year]'
+                    //if (dt === 'Klasa energetyczna') energyClass = $(item).find("dd").text().trim()
+                    if (dt === 'Pobór mocy [W]') powerConsumption = Number($(item).find("dd").text().trim()) + ' W';
+                    if (dt === 'Pobór mocy (czuwanie) [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim()) + ' W'
                 }
             })
 
             allData.push({
                 referral: "mediaMarkt",
                 tvName: attrProductName,
-                energyClass,
+                //energyClass,
                 powerConsumption,
-                annualEnergyConsumption,
+                powerConsumptionStandby,
             })
 
             resolve(allData)

@@ -17,7 +17,6 @@ let allUrlData = [];
 let allData = [];
 //let allData = require('./allUrlData');
 
-
 getAllData().then((result) => {
     //console.log("result >>>", result);
 
@@ -31,41 +30,41 @@ getAllData().then((result) => {
         objects.push(sliced)
     }
 
-    // callingData(objects[1]).then((response) => {
-    //     console.log("just right now", response)
-    //     allData.push(response)
-    // })
-
-    let request = objects.map((item) => {
-        return new Promise((resolve, reject) => {
-            return callingData(item).then((response) => {
-                console.log("just right now", response)
-                //allData.push(response)
-                return resolve(response)
-            }).catch(error => {
-                reject(error)
-            })
-        })
+    callingData(objects[1]).then((response) => {
+        console.log("just right now", response)
+        allData.push(response)
     })
 
-    console.log(request)
+    // let request = objects.map((item) => {
+    //     return new Promise((resolve, reject) => {
+    //         return callingData(item).then((response) => {
+    //             console.log("just right now", response)
+    //             //allData.push(response)
+    //             return resolve(response)
+    //         }).catch(error => {
+    //             reject(error)
+    //         })
+    //     })
+    // })
 
-    request.reduce((promiseChain, currentTask) => {
-        return promiseChain
-            .then(chainResults => currentTask
-                .then(currentResult => chainResults = chainResults
-                    .concat(currentResult))
-            ).catch(err => {
-                return err;
-            });
-    }, Promise.resolve(request)).then(response => {
-        console.log(">>> response laaast", response);
-        allData.push(response)
-        return response;
-    }).catch(err => {
-        console.error(">>> ERR :: ", err);
-        return err;
-    });
+    // console.log(request)
+
+    // request.reduce((promiseChain, currentTask) => {
+    //     return promiseChain
+    //         .then(chainResults => currentTask
+    //             .then(currentResult => chainResults = chainResults
+    //                 .concat(currentResult))
+    //         ).catch(err => {
+    //             return err;
+    //         });
+    // }, Promise.resolve(request)).then(response => {
+    //     console.log(">>> response laaast", response);
+    //     allData.push(response)
+    //     return response;
+    // }).catch(err => {
+    //     console.error(">>> ERR :: ", err);
+    //     return err;
+    // });
 
 }).catch(error => {
     console.log("ERR getAllData >>>", error)
