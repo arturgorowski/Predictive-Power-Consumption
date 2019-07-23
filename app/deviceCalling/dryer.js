@@ -1,19 +1,18 @@
 const DeviceListParser = require('../app').DeviceListParser;
 const mongoose = require('mongoose');
 
-const getAllData = require('../DAO/homeTheaterSetDAO').getAllData;
+const getAllData = require('../DAO/dryerDAO').getAllData;
 mongoose.connect('mongodb://localhost/predictivePowerConsumption', { useNewUrlParser: true });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 
-let parseResponseHtmlMediaMarkt = require('../mediaMarkt/parsers/homeTheaterSet').parseResponseHtml;
-let parseResponseHtmlMediaExpert = require('../mediaExpert/parsers/homeTheaterSet').parseResponseHtml;
-let parseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/parsers/homeTheaterSet').parseResponseHtml;
+let parseResponseHtmlMediaMarkt = require('../mediaMarkt/parsers/dryer').parseResponseHtml;
+let parseResponseHtmlMediaExpert = require('../mediaExpert/parsers/dryer').parseResponseHtml;
+let parseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/parsers/dryer').parseResponseHtml;
 
 const listScrapper = new DeviceListParser();
 let allUrlData = [];
 let allData = [];
-//let allData = require('./allUrlData');
 
 getAllData().then((result) => {
     //console.log("result >>>", result);

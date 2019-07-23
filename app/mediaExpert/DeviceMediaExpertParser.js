@@ -16,14 +16,19 @@ class DeviceListMediaExpertParser {
 
     parse(html, baseDomainName) {
         const $ = cheerio.load(html);
-        let page = $("input.js-jumpToPage")[0].attribs['data-lpage']
+        let page = $("input.js-jumpToPage")//[0].attribs['data-lpage']
+        if (page.length > 0) {
+            page = page[0].attribs['data-lpage']
 
-        for (let i = 1; i <= page; i++) {
+            for (let i = 1; i <= page; i++) {
+                let url = baseDomainName + pageNumber;
+                urlList.push({ url });
+                pageNumber += 20;
+            }
+        } else {
             let url = baseDomainName + pageNumber;
             urlList.push({ url });
-            pageNumber += 20;
         }
-
         let promises = urlList.map(url => {
             return rp(url).then(response => {
                 return response

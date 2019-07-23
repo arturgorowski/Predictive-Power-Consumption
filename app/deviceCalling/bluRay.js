@@ -1,7 +1,7 @@
 const DeviceListParser = require('../app').DeviceListParser;
 const mongoose = require('mongoose');
 
-const getAllData = require('../DAO/homeTheaterSetDAO').getAllData;
+const getAllData = require('../DAO/bluRayDAO').getAllData;
 mongoose.connect('mongodb://localhost/predictivePowerConsumption', { useNewUrlParser: true });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));

@@ -1,6 +1,7 @@
 const cheerio = require('cheerio');
 
-let powerConsumption = '';
+let powerConsumption = 'no data',
+    noiseLevel = 'no data';
 
 /**
  * 
@@ -10,9 +11,9 @@ function parseResponseHtml(html) {
     return new Promise((resolve, reject) => {
         try {
             const allData = [];
-            
+
             const $ = cheerio.load(html);
-            
+
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
             let div = $('table.m-product_dataRow.is-technology');
@@ -20,20 +21,21 @@ function parseResponseHtml(html) {
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
             let powerConsumptionIdx = $("td:contains('Pobór mocy [W]')").parent("tr").index();
-            
-            powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
-            
+
+            if (powerConsumptionIdx > 0) powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+
             allData.push({
                 referral: "mediaExpert",
                 productName,
                 powerConsumption,
+                noiseLevel
             })
             resolve(allData);
 
         } catch (error) {
             reject(error);
         }
-    })
+    });
 }
 
 module.exports = { parseResponseHtml };

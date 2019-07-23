@@ -17,13 +17,20 @@ class DeviceListEuroRtvAgdParser {
     parse(html, baseDomainName) {
         const $ = cheerio.load(html);
         let page = $("div.paging-numbers")[1].childNodes.length;
-        let newBaseDomainName = baseDomainName.slice(0, baseDomainName.length-20);
+        // if (page.length > 0) {
+        //     page = $("div.paging-numbers")[1].childNodes.length;
 
-        for (let i = 1; i <= page + 1; i++) {
+        let newBaseDomainName = baseDomainName.slice(0, baseDomainName.length - 20);
+
+        for (let i = 1; i <= page + 1; i+=2) {
             let url = newBaseDomainName + ',strona-' + pageNumber + '.bhtml';
             urlList.push({ url });
             pageNumber++;
         }
+        // } else {
+        //     urlList.push({ baseDomainName });
+        // }
+
 
         let promises = urlList.map(url => {
             return rp(url).then(response => {

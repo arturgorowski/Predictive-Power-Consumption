@@ -1,7 +1,8 @@
 const cheerio = require('cheerio');
 
 let energyClass = '',
-    annualEnergyConsumption = '';
+    annualEnergyConsumption = '',
+    noiseLevel = 'no data';
 
 /**
  * 
@@ -20,17 +21,27 @@ function parseResponseHtml(html) {
             let energyClassIndex = $("td:contains('Klasa energetyczna')").parent("tr").index();
             let annualEnergyConsumptionIndex = $("td:contains('Roczne zużycie energii')").parent("tr").index();
             let annualEnergyConsumptionIndex1 = $("td:contains('Roczne zużycie prądu')").parent("tr").index();
+            let noiseLevelIndex = $("td:contains('Poziom hałasu')").parent("tr").index();
 
-            energyClass = powerNode[energyClassIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
-            annualEnergyConsumption = powerNode[annualEnergyConsumptionIndex>0 ? annualEnergyConsumptionIndex : annualEnergyConsumptionIndex1].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()
+            if (energyClassIndex > 0) {
+                energyClass = powerNode[energyClassIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+            }
+
+            if (annualEnergyConsumptionIndex > 0 || annualEnergyConsumptionIndex1 > 0) {
+                annualEnergyConsumption = powerNode[annualEnergyConsumptionIndex > 0 ? annualEnergyConsumptionIndex : annualEnergyConsumptionIndex1].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+            }
+
+            if (noiseLevelIndex > 0) {
+                noiseLevel = powerNode[noiseLevelIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+            }
 
             allData.push({
                 referral: "euroRtvAgd",
                 productName,
                 energyClass,
                 annualEnergyConsumption,
-
-            })
+                noiseLevel
+            });
 
             resolve(allData);
 
