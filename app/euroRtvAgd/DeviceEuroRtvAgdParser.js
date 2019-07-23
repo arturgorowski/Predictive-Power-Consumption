@@ -7,7 +7,7 @@ let address, pageNumber = 1, urlList = [];
 
 /**
  *  
- * Parser urządzeń ze strony Euro AGD RTV 
+ * Parser urządzeń z witryny Euro AGD RTV 
  */
 class DeviceListEuroRtvAgdParser {
 

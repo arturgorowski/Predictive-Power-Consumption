@@ -3,12 +3,10 @@ let rp = require('request-promise');
 
 const tvNameAndAddress = [];
 let name, address, pageNumber = 1, urlList = [];
-//let baseDomainName = 'https://mediamarkt.pl/rtv-i-telewizory/telewizory?limit=100&page=';
 
-//let baseDomainName = 'https://mediamarkt.pl/agd/lodowki-i-zamrazarki?limit=100&page=';
 /**
  * 
- * Parser urządzeń ze strony Media Markt 
+ * Parser urządzeń z witryny Media Markt 
  */
 class DeviceListMediaMarktParser {
 
