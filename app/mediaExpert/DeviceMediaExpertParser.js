@@ -7,7 +7,7 @@ let name, address, pageNumber = 0, urlList = [];
 
 /**
  * 
- * Parser urządzeń ze strony Media Expert 
+ * Parser urządzeń z witryny Media Expert 
  */
 class DeviceListMediaExpertParser {
 
