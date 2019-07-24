@@ -1,7 +1,11 @@
 const cheerio = require('cheerio');
 
-let powerConsumption = 'no data',
-    noiseLevel = 'no data';
+let energyClass = 'no data',
+    powerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
+    annualEnergyConsumption = 'no data',
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -16,6 +20,8 @@ function parseResponseHtml(html) {
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            productName = productName.slice(9);
+            producent = productName.split(" ", 1)[0];
             let div = $('table.m-product_dataRow.is-technology');
 
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
@@ -26,9 +32,14 @@ function parseResponseHtml(html) {
 
             allData.push({
                 referral: "mediaExpert",
+                deviceType: 'soundbar',
                 productName,
+                energyClass,
                 powerConsumption,
-                noiseLevel
+                powerConsumptionStandby,
+                annualEnergyConsumption,
+                noiseLevel,
+                producent
             })
             resolve(allData);
 

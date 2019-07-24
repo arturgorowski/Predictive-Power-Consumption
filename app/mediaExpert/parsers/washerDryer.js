@@ -2,8 +2,10 @@ const cheerio = require('cheerio');
 
 let energyClass = 'no data',
     cyclePowerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
-    noiseLevel = 'no data';
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -17,6 +19,8 @@ function parseResponseHtml(html) {
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            productName.split(" ", 1)[0].length === 6 ? productName = productName.slice(7) : productName = productName.slice(16)
+            producent = productName.split(" ", 1)[0];
             let div = $('table.m-product_dataRow.is-technology');
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
@@ -38,11 +42,14 @@ function parseResponseHtml(html) {
 
             allData.push({
                 referral: "mediaExpert",
+                deviceType: 'washerDryer',
                 productName,
                 energyClass,
                 cyclePowerConsumption,
+                powerConsumptionStandby,
                 annualEnergyConsumption,
-                noiseLevel
+                noiseLevel,
+                producent
             });
 
             return resolve(allData);

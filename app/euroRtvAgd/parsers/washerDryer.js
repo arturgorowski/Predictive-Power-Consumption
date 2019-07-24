@@ -2,8 +2,10 @@ const cheerio = require('cheerio');
 
 let energyClass = 'no data',
     cyclePowerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
-    noiseLevel = 'no data';
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -17,6 +19,7 @@ function parseResponseHtml(html) {
             const $ = cheerio.load(html);
             let attrProductName = $("h1.selenium-KP-product-name");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            producent = productName.split(" ", 1)[0];
             let div = $('table.description-tech-details.js-tech-details');
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
@@ -38,11 +41,14 @@ function parseResponseHtml(html) {
 
             allData.push({
                 referral: "euroRtvAgd",
+                deviceType: 'washerDryer',
                 productName,
                 energyClass,
                 cyclePowerConsumption,
+                powerConsumptionStandby,
                 annualEnergyConsumption,
-                noiseLevel
+                noiseLevel,
+                producent
             });
             return resolve(allData);
 

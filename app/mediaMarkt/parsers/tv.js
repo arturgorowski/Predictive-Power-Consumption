@@ -4,7 +4,8 @@ let energyClass = 'no data',
     powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
-    noiseLevel = 'no data';
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -18,7 +19,9 @@ const parseResponseHtml = (html) => {
             
             const $ = cheerio.load(html);
             let div = $('div.m-offerShowData');
-            let attrProductName = $("h1.m-typo.m-typo_primary").text().trim();
+            let productName = $("h1.m-typo.m-typo_primary").text().trim();
+            productName = productName.slice(10);
+            producent = productName.split(" ", 1)[0];
             const powerNode = div[0].childNodes[13];
 
             powerNode.children.forEach((item, k) => {
@@ -34,12 +37,14 @@ const parseResponseHtml = (html) => {
 
             allData.push({
                 referral: "mediaMarkt",
-                tvName: attrProductName,
+                deviceType: 'tv',
+                productName,
                 energyClass,
                 powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
-                noiseLevel
+                noiseLevel,
+                producent
             });
 
             resolve(allData);

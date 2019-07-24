@@ -1,8 +1,11 @@
 const cheerio = require('cheerio');
 
-let energyClass = '',
-    annualEnergyConsumption = '',
-    noiseLevel = 'no data';
+let energyClass = 'no data',
+    powerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
+    annualEnergyConsumption = 'no data',
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -12,10 +15,11 @@ function parseResponseHtml(html) {
     return new Promise((resolve, reject) => {
         try {
             const allData = [];
-            const $ = cheerio.load(html)
-            let attrProductName = $("h1.selenium-KP-product-name")
-            let productName = attrProductName[0].childNodes[0].nodeValue.trim()
-            let div = $('table.description-tech-details.js-tech-details')
+            const $ = cheerio.load(html);
+            let attrProductName = $("h1.selenium-KP-product-name");
+            let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            producent = productName.split(" ", 1)[0];
+            let div = $('table.description-tech-details.js-tech-details');
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
             let energyClassIndex = $("td:contains('Klasa energetyczna')").parent("tr").index();
@@ -37,12 +41,15 @@ function parseResponseHtml(html) {
 
             allData.push({
                 referral: "euroRtvAgd",
+                deviceType: 'fridge',
                 productName,
                 energyClass,
+                powerConsumption,
+                powerConsumptionStandby,
                 annualEnergyConsumption,
-                noiseLevel
+                noiseLevel,
+                producent
             });
-
             resolve(allData);
 
         } catch (error) {

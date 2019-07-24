@@ -1,8 +1,11 @@
 const cheerio = require('cheerio');
 
-let powerConsumption = 'no data',
-    powerConsumptionStandby = 'no data'
-noiseLevel = 'no data';
+let energyClass = 'no data',
+    powerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
+    annualEnergyConsumption = 'no data',
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -17,6 +20,8 @@ function parseResponseHtml(html) {
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            productName.split(" ", 1)[0].length === 4 ? productName = productName.slice(12) : productName = productName.slice(14)
+            producent = productName.split(" ", 1)[0];
             let div = $('table.m-product_dataRow.is-technology');
 
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
@@ -34,10 +39,14 @@ function parseResponseHtml(html) {
 
             allData.push({
                 referral: "mediaExpert",
+                deviceType: 'bluRay',
                 productName,
+                energyClass,
                 powerConsumption,
                 powerConsumptionStandby,
-                noiseLevel
+                annualEnergyConsumption,
+                noiseLevel,
+                producent
             });
             resolve(allData);
 

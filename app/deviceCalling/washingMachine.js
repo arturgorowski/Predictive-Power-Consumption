@@ -22,8 +22,8 @@ getAllData().then((result) => {
     });
 
     let objects = []
-    for (let i = 0; i < allUrlData.length; i += 50) {
-        let sliced = allUrlData.slice(i, i + 50)
+    for (let i = 0; i < allUrlData.length; i += 40) {
+        let sliced = allUrlData.slice(i, i + 40)
         objects.push(sliced)
     }
 

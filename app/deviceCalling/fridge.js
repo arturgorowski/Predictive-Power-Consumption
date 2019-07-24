@@ -8,9 +8,9 @@ mongoose.connect('mongodb://localhost/predictivePowerConsumption', { useNewUrlPa
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 
-let parseResponseHtmlMediaMarkt = require('../mediaMarkt/fridge').parseResponseHtml;
-let parseResponseHtmlMediaExpert = require('../mediaExpert/fridge').parseResponseHtml;
-let parseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/fridge').parseResponseHtml;
+let parseResponseHtmlMediaMarkt = require('../mediaMarkt/parsers/fridge').parseResponseHtml;
+let parseResponseHtmlMediaExpert = require('../mediaExpert/parsers/fridge').parseResponseHtml;
+let parseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/parsers/fridge').parseResponseHtml;
 
 const listScrapper = new DeviceListParser();
 let allUrlData = [];

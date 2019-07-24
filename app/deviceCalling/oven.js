@@ -27,7 +27,7 @@ getAllData().then((result) => {
         objects.push(sliced)
     }
 
-    callingData(objects[1]).then((response) => {
+    callingData(objects[6]).then((response) => {
         console.log("just right now >>>", response)
         allData.push(response)
     })

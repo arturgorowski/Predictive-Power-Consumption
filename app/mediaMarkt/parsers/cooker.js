@@ -1,10 +1,11 @@
 const cheerio = require('cheerio');
 
 let energyClass = 'no data',
-    powerConsumptionStandby = 'no data',
     cyclePowerConsumption = 'no data',
+    powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
-    noiseLevel = 'no data';
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -17,7 +18,9 @@ const parseResponseHtml = (html) => {
             const allData = [];
             const $ = cheerio.load(html);
             let div = $('div.m-offerShowData');
-            let attrProductName = $("h1.m-typo.m-typo_primary").text().trim();
+            let productName = $("h1.m-typo.m-typo_primary").text().trim();
+            productName = productName.slice(8);
+            producent = productName.split(" ", 1)[0];
 
             const energyClassNode = div[0].childNodes[3];
             const noiseNode = div[0].childNodes[1];
@@ -41,12 +44,14 @@ const parseResponseHtml = (html) => {
 
             allData.push({
                 referral: "mediaMarkt",
-                tvName: attrProductName,
+                deviceType: 'cooker',
+                productName,
                 energyClass,
                 cyclePowerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
-                noiseLevel
+                noiseLevel,
+                producent
             });
 
             resolve(allData);

@@ -1,8 +1,11 @@
 const cheerio = require('cheerio');
 
-let powerConsumption = 'no data',
+let energyClass = 'no data',
+    powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
-    noiseLevel = 'no data';
+    annualEnergyConsumption = 'no data',
+    noiseLevel = 'no data',
+    producent = 'no data';
 
 /**
  * 
@@ -15,7 +18,9 @@ const parseResponseHtml = (html) => {
             const allData = [];
             const $ = cheerio.load(html);
             let div = $('div.m-offerShowData');
-            let attrProductName = $("h1.m-typo.m-typo_primary").text().trim();
+            let productName = $("h1.m-typo.m-typo_primary").text().trim();
+            productName = productName.slice(12);
+            producent = productName.split(" ", 1)[0];
             const powerNode = div[0].childNodes[13];
 
             powerNode.children.forEach((item, k) => {
@@ -27,27 +32,19 @@ const parseResponseHtml = (html) => {
                     if (dt === 'Pobór mocy (czuwanie) [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim()) + ' W';
                 }
             });
-            if (powerConsumption === 'no data' && powerConsumptionStandby === 'no data') {
-                allData.push({
-                    referral: "mediaMarkt",
-                    tvName: attrProductName,
-                    powerConsumption,
-                    powerConsumptionStandby,
-                    noiseLevel
-                });
+            allData.push({
+                referral: "mediaMarkt",
+                deviceType: 'homeTheaterSet',
+                productName,
+                energyClass,
+                powerConsumption,
+                powerConsumptionStandby,
+                annualEnergyConsumption,
+                noiseLevel,
+                producent
+            });
 
-                return resolve(allData);
-            } else {
-                allData.push({
-                    referral: "mediaMarkt",
-                    tvName: attrProductName,
-                    powerConsumption,
-                    powerConsumptionStandby,
-                    noiseLevel
-                });
-
-                return resolve(allData);
-            }
+            resolve(allData);
         } catch (error) {
             reject(error);
         }
@@ -55,3 +52,4 @@ const parseResponseHtml = (html) => {
 }
 
 module.exports = { parseResponseHtml };
+
