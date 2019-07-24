@@ -1,0 +1,26 @@
+{
+  "name": "fridge",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "ObjectId"
+    },
+    "name": {
+      "type": "String"
+    },
+    "address": {
+      "type": "String"
+    },
+    "shop": {
+      "type": "String"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

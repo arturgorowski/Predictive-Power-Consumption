@@ -1,0 +1,39 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "tv": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "predictivePowerConsumption",
+    "password": "",
+    "name": "tv",
+    "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  },
+  "fridge": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "predictivePowerConsumption",
+    "password": "",
+    "name": "fridge",
+    "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  },
+  "devices": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "predictivePowerConsumption",
+    "password": "",
+    "name": "devices",
+    "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  }
+}
