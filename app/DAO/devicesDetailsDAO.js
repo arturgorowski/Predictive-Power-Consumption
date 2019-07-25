@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const deviceDetailsSchema = new mongoose.Schema({
+const devicesPowerInformationSchema = new mongoose.Schema({
     referral: { type: String },
     deviceType: { type: String },
     productName: { type: String },
@@ -9,18 +9,19 @@ const deviceDetailsSchema = new mongoose.Schema({
     powerConsumptionStandby: { type: String },
     annualEnergyConsumption: { type: String },
     noiseLevel: { type: String },
-    producent: { type: String }
+    producent: { type: String },
+    model: { type: String }
 },
     {
-        collection: 'deviceDetails'
+        collection: 'devicesPowerInformation'
     });
 
-const DeviceDetailsSchema = mongoose.model('deviceDetails', deviceDetailsSchema);
+const DevicesPowerInformationModel = mongoose.model('devicesPowerInformation', devicesPowerInformationSchema);
 
-async function getAllData(deviceType, productName){
-    const result = await DeviceDetailsSchema.find({ shop: deviceType, name: { $regex: '/'+productName+'$/' } });
+async function getAllData() {
+    const result = await DevicesPowerInformationModel.find({});
     {
-        if (result){
+        if (result) {
             return result;
         }
     }
@@ -28,5 +29,5 @@ async function getAllData(deviceType, productName){
 
 module.exports = {
     getAllData: getAllData,
-    model: DeviceDetailsSchema
+    model: DevicesPowerInformationModel
 }

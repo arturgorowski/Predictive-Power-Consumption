@@ -1,0 +1,16 @@
+db.getCollection('devices').find({}).limit(100).forEach((item)=>{
+    
+    let model = item.name.trim().split(" ").map(item=> item.replace("-",""));
+    model = model.find(item => !(/^[a-zA-Z]+$/i).test(item))
+    printjson(model)
+     
+})
+
+let aaaaaa = db.getCollection('devices').find({})limit(1000).toArray();
+aaaaaa.forEach((item,k) => {
+    let model = item.name.trim().split(" ").map(item=> item.replace("-",""));
+    model = model.find(item => !(/^['4K'.ąęółśża-zĄĘÓŁŚŻA-Z]+$/i).test(item))
+    item.model = model
+    db.getCollection('devices_new').insert(item)
+   //db.getCollection('devices').update({_id: item._id},{$set: {model: model}})
+ })

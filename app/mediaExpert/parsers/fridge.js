@@ -16,7 +16,7 @@ function parseResponseHtml(html) {
         try {
             const allData = [];
 
-            const $ = cheerio.load(html);
+            const $ = cheerio.load(html, model);
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
@@ -52,7 +52,8 @@ function parseResponseHtml(html) {
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
             resolve(allData);
 

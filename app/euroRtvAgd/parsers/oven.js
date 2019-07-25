@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 
 let energyClass = 'no data',
-    cyclePowerConsumption = 'no data',
+    powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
     noiseLevel = 'no data',
@@ -11,7 +11,7 @@ let energyClass = 'no data',
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
-function parseResponseHtml(html) {
+function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
         try {
             const allData = [];
@@ -33,7 +33,7 @@ function parseResponseHtml(html) {
             }
 
             if (cyclePowerConsumptionIndex > 0) {
-                cyclePowerConsumption = powerNode[cyclePowerConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+                powerConsumption = powerNode[cyclePowerConsumptionIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
             }
 
             if (annualEnergyConsumptionIndex > 0) {
@@ -49,11 +49,12 @@ function parseResponseHtml(html) {
                 deviceType: 'oven',
                 productName,
                 energyClass,
-                cyclePowerConsumption,
+                powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
             return resolve(allData);
 

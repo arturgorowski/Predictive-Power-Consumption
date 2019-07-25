@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 
 let energyClass = 'no data',
-    cyclePowerConsumption = 'no data',
+    powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
     noiseLevel = 'no data',
@@ -11,7 +11,7 @@ let energyClass = 'no data',
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
-const parseResponseHtml = (html) => {
+const parseResponseHtml = (html, model) => {
     return new Promise((resolve, reject) => {
         try {
 
@@ -36,7 +36,7 @@ const parseResponseHtml = (html) => {
                     let dt = $(item).find("dt").text().trim();
                     if (dt === 'Klasa energetyczna') energyClass = $(item).find("dd").text().trim();
                     if (dt === 'Zużycie energii w trybie czuwania [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim()) + ' W';
-                    if (dt === 'Zużycie energii na cykl [kWh]') cyclePowerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
+                    if (dt === 'Zużycie energii na cykl [kWh]') powerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
                     if (dt === 'Zużycie energii na rok [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
                 }
             });
@@ -46,11 +46,12 @@ const parseResponseHtml = (html) => {
                 deviceType: 'washer',
                 productName,
                 energyClass,
-                cyclePowerConsumption,
+                powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
 
             resolve(allData);

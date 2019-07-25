@@ -26,8 +26,8 @@ class DeviceListParser {
      */
     getScrapperList(tvNameAndAddress) {
 
-        tvNameAndAddress.forEach((address) => {
-            addresses.push(address.address)
+        tvNameAndAddress.forEach((item) => {
+            addresses.push({address: item.address, type: item.type, shop: item.shop, model: item.model})
         })
 
         let it = 1;
@@ -37,7 +37,7 @@ class DeviceListParser {
                 setTimeout(function () {
                     let options = {
                         method: 'GET',
-                        uri: url,
+                        uri: url.address,
                         //proxy: 'http://77.119.237.96:40224',
                         insecure: true,
                         rejectUnauthorized: false,
@@ -47,7 +47,7 @@ class DeviceListParser {
                     }
                     rp(options).then((response) => {
                         console.log(it++)
-                        return resolve(response)
+                        resolve({response, type: url.type, shop: url.shop, model: url.model})
                     }).catch((error) => {
                         console.log("ERR getScrapperList >>>", error)
                         reject(error)

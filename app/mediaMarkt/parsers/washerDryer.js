@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 
 let energyClass = 'no data',
-    cyclePowerConsumption = 'no data',
+    powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
     noiseLevel = 'no data',
@@ -11,7 +11,7 @@ let energyClass = 'no data',
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
-const parseResponseHtml = (html) => {
+const parseResponseHtml = (html, model) => {
     return new Promise((resolve, reject) => {
         try {
 
@@ -43,7 +43,7 @@ const parseResponseHtml = (html) => {
             powerNode.children.forEach((item, k) => {
                 if (item.type !== "text") {
                     let dt = $(item).find("dt").text().trim();
-                    if (dt === 'Zużycie energii na cykl (pranie i wirowanie) [kWh]') cyclePowerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
+                    if (dt === 'Zużycie energii na cykl (pranie i wirowanie) [kWh]') powerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
                     if (dt === 'Zużycie energii na rok (pranie, wirowanie i suszenie [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
                 }
             });
@@ -53,11 +53,12 @@ const parseResponseHtml = (html) => {
                 deviceType: 'washerDryer',
                 productName,
                 energyClass,
-                cyclePowerConsumption,
+                powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
 
             resolve(allData);

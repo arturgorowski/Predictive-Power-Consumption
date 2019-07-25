@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 
 let energyClass = 'no data',
-    cyclePowerConsumption = 'no data',
+    powerConsumption = 'no data',
     powerConsumptionStandby = 'no data',
     annualEnergyConsumption = 'no data',
     noiseLevel = 'no data',
@@ -11,7 +11,7 @@ let energyClass = 'no data',
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
-function parseResponseHtml(html) {
+function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
         try {
             const allData = [];
@@ -34,7 +34,7 @@ function parseResponseHtml(html) {
             }
 
             if (cyclePowerConsumptionIdx > 0) {
-                cyclePowerConsumption = powerNode[cyclePowerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+                powerConsumption = powerNode[cyclePowerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
             }
 
             if (annualEnergyConsumptionIdx > 0) {
@@ -50,11 +50,12 @@ function parseResponseHtml(html) {
                 deviceType: 'washer',
                 productName,
                 energyClass,
-                cyclePowerConsumption,
+                powerConsumption,
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
 
             resolve(allData);

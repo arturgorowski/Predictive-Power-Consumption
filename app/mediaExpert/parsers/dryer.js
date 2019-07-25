@@ -11,7 +11,7 @@ let energyClass = 'no data',
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
-function parseResponseHtml(html) {
+function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
         try {
             const allData = [];
@@ -49,7 +49,8 @@ function parseResponseHtml(html) {
                 powerConsumptionStandby,
                 annualEnergyConsumption,
                 noiseLevel,
-                producent
+                producent,
+                model
             });
 
             resolve(allData);
