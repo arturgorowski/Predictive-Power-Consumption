@@ -1,0 +1,47 @@
+{
+  "name": "devicesPowerInformation",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "ObjectId"
+    },
+    "referral": {
+      "type": "string"
+    },
+    "deviceType": {
+      "type": "string"
+    },
+    "productName": {
+      "type": "string"
+    },
+    "energyClass": {
+      "type": "string"
+    },
+    "powerConsumption": {
+      "type": "string"
+    },
+    "powerConsumptionStandby": {
+      "type": "string"
+    },
+    "annualEnergyConsumption": {
+      "type": "string"
+    },
+    "noiseLevel": {
+      "type": "string"
+    },
+    "producent": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
