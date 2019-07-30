@@ -1,7 +1,26 @@
+let ghostConfig
+
+try {
+  ghostConfig = require(`./.ghost`)
+} catch (e) {
+  ghostConfig = {
+    production: {
+      apiUrl: process.env.GHOST_API_URL,
+      contentApiKey: process.env.GHOST_CONTENT_API_KEY,
+    },
+  }
+} finally {
+  const { apiUrl, contentApiKey } = process.env.NODE_ENV === `development` ? ghostConfig.development : ghostConfig.production
+
+  if (!apiUrl || !contentApiKey || contentApiKey.match(/<key>/)) {
+    throw new Error(`GHOST_API_URL and GHOST_CONTENT_API_KEY are required to build. Check the README.`) // eslint-disable-line
+  }
+}
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `Search`,
+    description: `Predictive Power Consumtion`,
     author: `@gatsbyjs`,
   },
   plugins: [
@@ -26,6 +45,20 @@ module.exports = {
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
+    },
+    {
+      resolve: `gatsby-source-ghost`,
+      options:
+        process.env.NODE_ENV === `development`
+          ? ghostConfig.development
+          : ghostConfig.production,
+    },
+    {
+      resolve: `gatsby-source-ghost`,
+      options: {
+        apiUrl: `https://ghostv3-app-ag.herokuapp.com`,
+        contentApiKey: `31a6df6cbe2be90e8297f1376c`
+      }
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
