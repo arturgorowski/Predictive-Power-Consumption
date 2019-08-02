@@ -25,12 +25,12 @@ const newDevicesSchema = new mongoose.Schema({
 const NewDevicesModel = mongoose.model('newDevices', newDevicesSchema);
 
 async function getAllData() {
-    const result = await DevicesModel.find({});
+    const result = await NewDevicesModel.find({});
     {
         if (result) {
             return result;
         }
-    }
+    } 
 }
 
 module.exports = {

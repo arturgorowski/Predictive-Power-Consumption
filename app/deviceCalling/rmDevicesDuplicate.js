@@ -32,7 +32,7 @@ getAllData().then((result) => {
             address: element.address,
             shop: element.shop,
             type: element.type,
-            model: element.model
+            model: element.model 
         });
     });
 

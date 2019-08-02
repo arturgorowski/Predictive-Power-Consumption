@@ -51,7 +51,7 @@ class DeviceListMediaExpertParser {
             htmlBody.forEach(html => {
                 const $ = cheerio.load(html);
 
-                let attrProductName = $("div.c-offerBox_header.clearfix2 h2.c-offerBox_title a");
+                let attrProductName = $("div.c-offerBox_content.clearfix2 h2.c-offerBox_title a");
 
                 for (let i = 0; i < attrProductName.length - 1; i++) {
 

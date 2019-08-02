@@ -64,14 +64,14 @@ getAllData().then((result) => {
     });
 
     let objects = []
-    for (let i = 0; i < allUrlData.length; i += 20) {
-        let sliced = allUrlData.slice(i, i + 20)
+    for (let i = 0; i < allUrlData.length; i += 35) {
+        let sliced = allUrlData.slice(i, i + 35)
         objects.push(sliced)
     }
 
     console.log(">>>>", objects.length)
 
-    callingData(objects[ 143 ]).then((response) => {
+    callingData(objects[ 3 ]).then((response) => {
         console.log("just right now >>>", response)
         //allData.push(response)
         response.forEach((item) => {

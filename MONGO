@@ -6,11 +6,15 @@ db.getCollection('devices').find({}).limit(100).forEach((item)=>{
      
 })
 
-let aaaaaa = db.getCollection('devices').find({})limit(1000).toArray();
-aaaaaa.forEach((item,k) => {
+let devices = db.getCollection('devices').find({})limit(1000).toArray();
+devices.forEach((item,k) => {
     let model = item.name.trim().split(" ").map(item=> item.replace("-",""));
     model = model.find(item => !(/^['4K'.ąęółśża-zĄĘÓŁŚŻA-Z]+$/i).test(item))
     item.model = model
     db.getCollection('devices_new').insert(item)
    //db.getCollection('devices').update({_id: item._id},{$set: {model: model}})
  })
+
+ db.devicesPowerInformation_copy.createIndex({"referral":"text","deviceType":"text","productName":"text","energyClass":"text",
+    "powerConsumption":"text", "powerConsumptionStandby":"text", "annualEnergyConsumption":"text", "noiseLevel":"text",
+    "producent":"text","model":"text"},{"name": "meta"})
