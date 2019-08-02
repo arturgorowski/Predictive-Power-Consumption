@@ -108,7 +108,9 @@ class HomePage extends React.Component {
               </ul>
 
             </div>
-            <div className="dataDeviceInfo">
+            <div className="dataDeviceInfo"
+              style={{ flex: 1, fontSize: '2vw', width: '50%', height: 200, opacity: 1, textAlign: 'left', borderRadius: '4px', border: 'none' }}
+            >
               <ul>
                 <p>{deviceType}</p>
                 <p>{productName}</p>
