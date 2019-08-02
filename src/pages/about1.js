@@ -5,7 +5,7 @@ import Page from '../templates/page'
 const About1 = ({ data }) => {
     return (
         <div>
-            <Page data={data.allGhostPage.edges[0].node} />
+            <Page data={data.allGhostPage.edges[2].node} />
         </div>
     )
 }
