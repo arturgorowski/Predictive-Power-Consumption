@@ -13,11 +13,25 @@
     padding-bottom: 230px
 }
 
+.description{
+    color: white;
+    font-size: 4vw;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.title{
+    color: white;
+    font-size: 2vw;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
 .autocomplete{
     justify-content:  center;
 }
 
-.autocomplete-input{
+.autocompleteInput{
     font-size: 2vw;
     width: 60%;
     height: 50;
@@ -27,7 +41,7 @@
     border: none; 
 }
 
-.autocomplete-result{
+.autocompleteResult{
     margin: 0;
     font-size: 2vw;
     padding: 0;
@@ -45,8 +59,13 @@
     margin: 0;
     align-content: center;
     text-align: center;
-    margin-top: 25;
+    margin-top: 25px;
     font-size: 1.5vw;
+}
+
+.aboutPage{
+    text-decoration: none;
+    color: #fff;
 }
 
 .deviceInformation{
@@ -74,4 +93,8 @@
     opacity: 1;
     text-align: left;
     font-weight: bold;
+}
+
+.deviceType{
+    align-items: right;
 }

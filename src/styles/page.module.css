@@ -5,10 +5,22 @@ img {
 
 .container{
     flex: 1;
-     flex-direction: 'row';
+    flex-direction: row;
 }
 
 .content{
-    width: '100%';
-     text-align: 'center';
+    width: 100%;
+    text-align: center;
+} 
+
+.contentTitle{
+    font-size: 3vw;
+    margin-top: 30px;
+}
+
+.contentBody{
+    font-size: 1.4vw;
+    margin-left: 50px;
+    margin-right: 50px;
+    text-align: center;
 }
