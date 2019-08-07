@@ -61,6 +61,14 @@ module.exports = {
         contentApiKey: `31a6df6cbe2be90e8297f1376c`
       }
     },
+    // {
+    //   resolve: "gatsby-source-graphql",
+    //   options: {
+    //     typeName: "API",
+    //     fieldName: "allDeviceType",
+    //     url: "http://localhost:3000/api/devicesPowerInformations/allDeviceType",
+    //   },
+    // },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

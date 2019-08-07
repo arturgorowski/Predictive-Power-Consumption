@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 import PropTypes from 'prop-types'
-import { graphql } from "gatsby"
+import { graphql } from 'gatsby'
 const Post = ({ data }) => {
   const post = data.ghostPost
   return (

@@ -11,8 +11,6 @@ const Page = ({ data }) => {
 
           <h1 className={styles.contentTitle}>{data.title}</h1>
 
-          {/* The main page content */}
-
           <section
             className={`${styles.contentBody} load-external-scripts`}
             dangerouslySetInnerHTML={{ __html: data.html }}

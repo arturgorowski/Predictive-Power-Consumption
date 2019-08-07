@@ -19,7 +19,8 @@ class HomePage extends React.Component {
       powerConsumption: '',
       powerConsumptionStandby: '',
       annualEnergyConsumption: '',
-      noiseLevel: ''
+      noiseLevel: '',
+      producent: ''
     }
   }
 
@@ -57,7 +58,8 @@ class HomePage extends React.Component {
             powerConsumption: result.powerConsumption,
             powerConsumptionStandby: result.powerConsumptionStandby,
             annualEnergyConsumption: result.annualEnergyConsumption,
-            noiseLevel: result.noiseLevel
+            noiseLevel: result.noiseLevel,
+            producent: result.producent
           })
         }
       }
@@ -66,13 +68,13 @@ class HomePage extends React.Component {
 
   render() {
     let data = this.props.data
-    const { deviceType, productName, energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, noiseLevel } = this.state
+    const { deviceType, productName, energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, noiseLevel, producent } = this.state
     return (
-      <>        
+      <>
         <div className={styles.container} >
 
           <div className={styles.description}>{data.siteMetadata.description}</div>
-          <div className={styles.title}>Enter the device and discover the magic!</div>
+          <div className={styles.title}>Type the device and discover the magic!</div>
 
           <div id='autocomplete' className={styles.autocomplete}>
             <input
@@ -86,41 +88,46 @@ class HomePage extends React.Component {
           </div>
 
           <div className={styles.about}>
-            <Link className={styles.aboutPage} style={{marginRight: 20}} to='/about1/'>About1</Link>
+            <Link className={styles.aboutPage} style={{ marginRight: 20 }} to='/about1/'>About1</Link>
             <Link className={styles.aboutPage} to='/about2/'>About2</Link>
           </div>
 
-          {deviceType.length > 0 ?
-          <div className={styles.deviceInformation}>
-            <div className={styles.textDeviceInfo}>
-              <ul>
-                <p>Device type:</p> 
-                <p>Product name:</p>
-                <p>Energy class:</p>
-                <p>Power consumption:</p>
-                <p>Power consumption standby:</p>
-                <p>Annual energy consumption:</p>
-                <p>Noise level:</p>
-              </ul>
+          {
+            deviceType.length > 0 ?
+              <div className={styles.deviceInformation}>
+                <div className={styles.textDeviceInfo}>
+                  <ul>
+                    <p>Device type:</p>
+                    <p>Product name:</p>
+                    <p>Producent:</p>
+                    <p>Energy class:</p>
+                    <p>Power consumption:</p>
+                    <p>Power consumption standby:</p>
+                    <p>Annual energy consumption:</p>
+                    <p>Noise level:</p>
+                  </ul>
 
-            </div>
-            <div className={styles.dataDeviceInfo}>
-              <ul>
-                <p>{deviceType}</p>
-                <p>{productName}</p>
-                <p>{energyClass}</p>
-                <p>{powerConsumption}</p>
-                <p>{powerConsumptionStandby}</p>
-                <p>{annualEnergyConsumption}</p>
-                <p>{noiseLevel}</p>
-              </ul>
+                </div>
+                <div className={styles.dataDeviceInfo}>
+                  <ul>
+                    <p>{deviceType}</p>
+                    <p>{productName}</p>
+                    <p>{producent}</p>
+                    <p>{energyClass}</p>
+                    <p>{powerConsumption}</p>
+                    <p>{powerConsumptionStandby}</p>
+                    <p>{annualEnergyConsumption}</p>
+                    <p>{noiseLevel}</p>
+                  </ul>
 
-            </div>
-          </div>
-          :<div></div>}
+                </div>
+              </div>
+              : <div></div>
+          }
 
-        <DeviceType style={styles.deviceType}/>
+
         </div>
+        <DeviceType style={styles.deviceType} />
       </>
     )
   }

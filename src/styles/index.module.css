@@ -5,19 +5,19 @@
     justify-content: center;
     text-align: center;
     width: 100%;
-    min-height: 1000px;
+    min-height: 850px;
     background-image: url('https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero-00e10b1f.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    padding-bottom: 230px
+    padding-bottom: 370px
 }
 
 .description{
     color: white;
     font-size: 4vw;
     margin-bottom: 10px;
-    margin-top: 10px;
+    margin-top: 60px;
 }
 
 .title{
@@ -42,6 +42,7 @@
 }
 
 .autocompleteResult{
+    cursor: pointer;
     margin: 0;
     font-size: 2vw;
     padding: 0;
@@ -52,6 +53,10 @@
     opacity: 0.8;
     list-style: none;
     box-shadow: 0 2px 2px rgba(0, 0, 0, .16);
+}
+
+li:hover{
+    background: orange;
 }
 
 .about{
@@ -79,7 +84,6 @@
     font-size: 2vw;
     width: 50%;
     height: 200px;
-    opacity: 1;
     text-align: right;
     font-weight: bold;
     border: none;
@@ -90,7 +94,6 @@
     font-size: 2vw;
     width: 50%;
     height: 200px;
-    opacity: 1;
     text-align: left;
     font-weight: bold;
 }

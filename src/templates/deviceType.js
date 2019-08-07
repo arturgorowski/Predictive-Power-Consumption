@@ -1,37 +1,45 @@
 import React from 'react'
-import { Link } from 'gatsby'
 import styles from '../styles/deviceType.module.css'
 
-const deviceTypeUrl = 'http://localhost:3000/api/devicesPowerInformations/findByDeviceType?search='
+const DeviceTypeTemplate = ({ device }) => {
 
-class DeviceTypeTemplate extends React.Component {
+    const { deviceType, productName, energyClass, powerConsumption, powerConsumptionStandby, annualEnergyConsumption, noiseLevel } = device
+    return (
+        <>
+            <div className={styles.container}>
 
-    constructor(props) {
-        super(props)
+                {deviceType.length > 0 ?
+                    <div className={styles.deviceInformation}>
+                        <div className={styles.textDeviceInfo}>
+                            <ul>
+                                <p>Device type:</p>
+                                <p>Product name:</p>
+                                <p>Energy class:</p>
+                                <p>Power consumption:</p>
+                                <p>Power consumption standby:</p>
+                                <p>Annual energy consumption:</p>
+                                <p>Noise level:</p>
+                            </ul>
 
-        this.state = {
-            data: []
-        }
-    }
+                        </div>
+                        <div className={styles.dataDeviceInfo}>
+                            <ul>
+                                <p>{deviceType}</p>
+                                <p>{productName}</p>
+                                <p>{energyClass}</p>
+                                <p>{powerConsumption}</p>
+                                <p>{powerConsumptionStandby}</p>
+                                <p>{annualEnergyConsumption}</p>
+                                <p>{noiseLevel}</p>
+                            </ul>
 
-    onClickDevice(){
-        console.log("click", this.props.deviceType.device)
-    }
+                        </div>
+                    </div>
+                    : <div></div>}
 
-
-
-    render() {
-        const device = this.props
-        console.log(device)
-        const { data } = this.state
-        return (
-            <>
-                <div className={styles.container}>
-                    {device.device}
-                </div>
-            </>
-        )
-    }
+            </div>
+        </>
+    )
 }
 
 export default DeviceTypeTemplate
