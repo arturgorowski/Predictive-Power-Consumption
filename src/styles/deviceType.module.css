@@ -1,5 +1,5 @@
 p{
-    margin: 1px;
+    margin: 10px;
 }
 .deviceContainer{
     flex-direction: column;
@@ -22,10 +22,10 @@ p{
     opacity: 0.5;
     font-size: 1.4vw;
     cursor: pointer;
-    width: 220px;
+    width: fit-content;
     height: 40px;
     margin: 0px 0px 5px 0px;
-    padding: 0px;
+    padding: 7px 3px 0px 3px;
 }
 
 .deviceInformation{
@@ -53,4 +53,11 @@ p{
     opacity: 1;
     text-align: left;
     font-weight: bold;
+}
+  
+/* Style the active class (and buttons on mouse-over) */
+.active, .deviceType:hover {
+  background-color: #666;
+  color: white;
+  font-weight: bold;
 }

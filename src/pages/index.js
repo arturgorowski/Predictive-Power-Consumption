@@ -51,16 +51,73 @@ class HomePage extends React.Component {
 
       onSubmit: result => {
         if (result !== undefined) {
-          this.setState({
-            deviceType: result.deviceType,
-            productName: result.productName,
-            energyClass: result.energyClass,
-            powerConsumption: result.powerConsumption,
-            powerConsumptionStandby: result.powerConsumptionStandby,
-            annualEnergyConsumption: result.annualEnergyConsumption,
-            noiseLevel: result.noiseLevel,
-            producent: result.producent
-          })
+          if (result.deviceType === 'fridge') {
+            if (result.powerConsumption === 'no data' && result.annualEnergyConsumption === 'no data') {
+              this.setState({
+                productName: result.productName,
+                producent: result.producent,
+                energyClass: result.energyClass,
+                powerConsumption: result.powerConsumption,
+                powerConsumptionStandby: result.powerConsumptionStandby,
+                annualEnergyConsumption: result.annualEnergyConsumption,
+                noiseLevel: result.noiseLevel,
+                deviceType: result.deviceType
+              })
+
+            }
+            if (result.powerConsumption === 'no data' && result.annualEnergyConsumption !== 'no data') {
+              let annualEnergyConsumptionTemp = (result.annualEnergyConsumption.split(" ", 1)[0]) / 366
+              let annualEnergyTemp = result.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
+              //console.log(annualEnergyTemp)
+              annualEnergyConsumptionTemp = Math.round(annualEnergyConsumptionTemp * 100) / 100
+              annualEnergyConsumptionTemp = annualEnergyConsumptionTemp + ' kWh'
+              this.setState({
+                productName: result.productName,
+                producent: result.producent,
+                energyClass: result.energyClass,
+                powerConsumption: annualEnergyConsumptionTemp,
+                powerConsumptionStandby: result.powerConsumptionStandby,
+                annualEnergyConsumption: annualEnergyTemp,
+                noiseLevel: result.noiseLevel,
+                deviceType: result.deviceType
+              })
+
+            } else {
+              this.setState({
+                productName: result.productName,
+                producent: result.producent,
+                energyClass: result.energyClass,
+                powerConsumption: result.powerConsumption,
+                powerConsumptionStandby: result.powerConsumptionStandby,
+                annualEnergyConsumption: result.annualEnergyConsumption,
+                noiseLevel: result.noiseLevel,
+                deviceType: result.deviceType
+              })
+            }
+          } else {
+            let annualEnergyTemp
+            result.annualEnergyConsumption === 'no data' ? annualEnergyTemp = 'no data' : annualEnergyTemp = result.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
+            this.setState({
+              productName: result.productName,
+              producent: result.producent,
+              energyClass: result.energyClass,
+              powerConsumption: result.powerConsumption,
+              powerConsumptionStandby: result.powerConsumptionStandby,
+              annualEnergyConsumption: annualEnergyTemp,
+              noiseLevel: result.noiseLevel,
+              deviceType: result.deviceType
+            })
+          }
+          // this.setState({
+          //   deviceType: result.deviceType,
+          //   productName: result.productName,
+          //   energyClass: result.energyClass,
+          //   powerConsumption: result.powerConsumption,
+          //   powerConsumptionStandby: result.powerConsumptionStandby,
+          //   annualEnergyConsumption: result.annualEnergyConsumption,
+          //   noiseLevel: result.noiseLevel,
+          //   producent: result.producent
+          // })
         }
       }
     })

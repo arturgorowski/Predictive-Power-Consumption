@@ -16,8 +16,8 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 
-const Pagination = ({ device }) => {
 
+const Pagination = ({ device }) => {
   const useStyles1 = makeStyles(theme => ({
     root: {
       flexShrink: 0,
@@ -28,10 +28,13 @@ const Pagination = ({ device }) => {
 
   function TablePaginationActions(props) {
 
+    //console.log("props", props)
+
     const classes = useStyles1();
     const theme = useTheme();
     const count = device.result.length
     const { page, rowsPerPage, onChangePage } = props;
+    //console.log(">>>>", page, rowsPerPage, onChangePage)
 
     function handleFirstPageButtonClick(event) {
       onChangePage(event, 0);
@@ -177,7 +180,7 @@ const Pagination = ({ device }) => {
         if (item.powerConsumption === 'no data' && item.annualEnergyConsumption !== 'no data') {
           let annualEnergyConsumptionTemp = (item.annualEnergyConsumption.split(" ", 1)[0]) / 366
           let annualEnergyTemp = item.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
-          console.log(annualEnergyTemp)
+          //console.log(annualEnergyTemp)
           annualEnergyConsumptionTemp = Math.round(annualEnergyConsumptionTemp * 100) / 100
           annualEnergyConsumptionTemp = annualEnergyConsumptionTemp + ' kWh'
           data.push({

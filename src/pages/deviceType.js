@@ -35,6 +35,20 @@ class DeviceType extends React.Component {
     onClicked(device, id) {
 
         let url = searchDeviceUrl + device._id.deviceType
+        let btnContainer = document.getElementsByClassName(styles.categories)[0];
+        let btns = btnContainer.getElementsByClassName(styles.deviceType);
+        // Loop through the buttons and add the active class to the current/clicked button
+        for (let i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                let current = document.getElementsByClassName(`${styles.active}`);
+                console.log("cur", current)
+                if (current.length > 0) {
+                    current[0].className = current[0].className.replace(`${styles.active}`, "");
+                }
+                this.className += ' ' + styles.active;
+            });
+        }
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -50,8 +64,8 @@ class DeviceType extends React.Component {
             <div className={styles.categories}>
                 {
                     this.state.data.map((item, k) => {
-                        return <div key={k} className={styles.deviceType}
-                            onClick={() => this.onClicked(item, k)}>{item._id.deviceType}({item.count})
+                        return <div id={k} key={k} className={styles.deviceType}
+                            onClick={() => this.onClicked(item, k)}>{item._id.deviceType} ({item.count})
                         </div>
                     })
                 }
