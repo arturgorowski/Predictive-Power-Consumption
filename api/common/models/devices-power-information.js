@@ -9,7 +9,7 @@ module.exports = function (Devicespowerinformation) {
     //         query.where = { "$text": { "search": search } };
     //     }
 
-    Devicespowerinformation.findAll = function (search, req, cb) {
+    Devicespowerinformation.findAll = function (search, time, req, cb) {
 
         let query = { where: [] };
 
@@ -34,6 +34,36 @@ module.exports = function (Devicespowerinformation) {
 
         Devicespowerinformation.count(query.$or).then(function (count) {
             return Devicespowerinformation.find(query).then(function (results) {
+
+                if (time !== undefined) {
+                    results.forEach(device => {
+                        switch (device.deviceType) {
+                            case fridge:
+                                return cb(null, { type: 'fr',total: count, result: results });
+                            case washingMachine:
+                                return cb(null, { type: 'wm',total: count, result: results });
+                            case oven:
+                                return cb(null, { type: 'ov',total: count, result: results });
+                            case soundbar:
+                                return cb(null, { type: 'sb',total: count, result: results });
+                            case washer:
+                                return cb(null, { type: 'w',total: count, result: results });
+                            case tv:
+                                return cb(null, { type: 'tv',total: count, result: results });
+                            case dryer:
+                                return cb(null, { type: 'dr',total: count, result: results });
+                            case washerDryer:
+                                return cb(null, { type: 'wd',total: count, result: results });
+                            case cooker:
+                                return cb(null, { type: 'c',total: count, result: results });
+                            case homeTheaterSet:
+                                return cb(null,  {type: 'hts',total: count, result: results });
+                            case bluRay:
+                                return cb(null, { type: 'br',total: count, result: results });
+
+                        }
+                    })
+                }
 
                 return cb(null, { total: count, result: results });
 
@@ -87,8 +117,8 @@ module.exports = function (Devicespowerinformation) {
 
         if (search !== undefined) {
             //search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            let regQuery = new RegExp(search, "i");
-            query.where = { "deviceType": regQuery };
+            //let regQuery = new RegExp(search, "i");
+            query.where = { "deviceType": search };
         }
 
         try {
@@ -120,7 +150,7 @@ module.exports = function (Devicespowerinformation) {
      */
     Devicespowerinformation.remoteMethod("findAll", {
         http: { path: "/all", verb: "get" },
-        accepts: [{ arg: "search", type: "string" }, { arg: "req", type: "object", http: { source: "req" } }],
+        accepts: [{ arg: "search", type: "string" }, { arg: "time", type: "string" }, { arg: "req", type: "object", http: { source: "req" } }],
         returns: [{ arg: "data", type: "any", description: "Get all matching objects", root: true }],
         description: "It search database for all matching word."
     });
@@ -134,8 +164,8 @@ module.exports = function (Devicespowerinformation) {
 
     Devicespowerinformation.remoteMethod("findByDeviceType", {
         http: { path: "/findByDeviceType", verb: "get" },
-        accepts: [{ arg: "search", type: "string"}, { arg: "req", type: "object", http: { source: "req" } }],
+        accepts: [{ arg: "search", type: "string" }, { arg: "req", type: "object", http: { source: "req" } }],
         returns: [{ arg: "data", type: "any", description: "Get all matching objects to device type", root: true }],
         description: "It return all device power information by device type."
-    })
+    });
 };
