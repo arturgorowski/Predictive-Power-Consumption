@@ -71,25 +71,34 @@ getAllData().then((result) => {
 
     console.log(">>>>", objects.length)
 
-    callingData(objects[ 3 ]).then((response) => {
+    //6, 8 nie poszło
+    callingData(objects[9]).then((response) => {
         console.log("just right now >>>", response)
-        //allData.push(response)
-        response.forEach((item) => {
-            let object = new DevicesPowerInformationModel({
-                referral: item[0].referral,
-                deviceType: item[0].deviceType,
-                productName: item[0].productName,
-                energyClass: item[0].energyClass,
-                powerConsumption: item[0].powerConsumption,
-                powerConsumptionStandby: item[0].powerConsumptionStandby,
-                annualEnergyConsumption: item[0].annualEnergyConsumption,
-                noiseLevel: item[0].noiseLevel,
-                producent: item[0].producent,
-                model: item[0].model
+
+        //unification.UnificationOfUnits(response).then(result => {
+
+
+            //allData.push(response)
+            response.forEach((item) => {
+                let object = new DevicesPowerInformationModel({
+                    referral: item[0].referral,
+                    deviceType: item[0].deviceType,
+                    productName: item[0].productName,
+                    energyClass: item[0].energyClass,
+                    powerConsumption: item[0].powerConsumption,
+                    powerConsumptionStandby: item[0].powerConsumptionStandby,
+                    annualEnergyConsumption: item[0].annualEnergyConsumption,
+                    noiseLevel: item[0].noiseLevel,
+                    producent: item[0].producent,
+                    model: item[0].model
+                })
+                object.save();
             })
-            object.save();
-        })
-        console.log("adding data succesfull")
+            console.log("adding data succesfull")
+
+
+        //})
+
     })
 
 }).catch(error => {
@@ -365,6 +374,10 @@ function callingData(allUrlData) {
 
 
             }
+            //  TODO Unification
+            // return unification.unification(allData).then(result => {
+            //     resolve(result);
+            // })
             resolve(allData);
             //console.log("all data >>>", allData)
             console.log("END >>>")

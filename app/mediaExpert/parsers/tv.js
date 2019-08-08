@@ -35,7 +35,7 @@ function parseResponseHtml(html, model) {
             }
 
             if (powerConsumptionIdx > 0) {
-                powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' W';
+                powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
             }
 
             if (powerConsumptionStandbyIdx > 0) {
