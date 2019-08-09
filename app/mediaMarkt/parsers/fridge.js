@@ -37,8 +37,13 @@ const parseResponseHtml = (html, model) => {
 
                     let dt = $(item).find("dt").text().trim();
                     if (dt === 'Klasa energetyczna') energyClass = $(item).find("dd").text().trim();
-                    if (dt === 'Zużycie energii [kWh/24h]') powerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
-                    if (dt === 'Zużycie energii [kWh/rok]') annualEnergyConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
+                    //if (dt === 'Zużycie energii [kWh/24h]') powerConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
+                    if (dt === 'Zużycie energii [kWh/rok]') {
+                        annualEnergyConsumption = Number($(item).find("dd").text().trim()); //+ ' kWh';
+
+                        powerConsumption = annualEnergyConsumption / 366
+                        powerConsumption = Math.round(annualEnergyConsumptionTemp * 100) / 100
+                    }
                 }
             });
 

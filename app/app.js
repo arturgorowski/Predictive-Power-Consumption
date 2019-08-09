@@ -106,7 +106,7 @@ DeviceListParser.create = (market) => {
 class DeviceListUrlScrapper {
 
     constructor(domain) {
-        this.baseDomainName = domain
+        this.baseDomainName = domain;
         this.domain = domain;
         
 

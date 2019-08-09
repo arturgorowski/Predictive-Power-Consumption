@@ -1,3 +1,7 @@
+const MediaMarktUnification = require('../app/mediaMarkt/MediaMarktUnification').MediaMarktUnification;
+const MediaExpertUnification = require('../app/mediaExpert/MediaExpertUnification').MediaExpertUnification;
+const EuroRtvAgdUnification = require('../app/euroRtvAgd/EuroRtvAgdUnification').EuroRtvAgdUnification;
+
 /**
  * 
  * Ujednolicenie jednostek elektrycznych urządzeń parsowanych z media marktu etc...
@@ -8,53 +12,43 @@ class UnificationOfUnits {
         this.devices = devices;
     }
 
-
     // TODO :
     // sparsowana tablica => detekcja urzadzenia => detekcja jednostki energii => zwrócenie jednostki w kWh
 
+    getUnificateData(devices) {
+        console.log(devices)
 
-    getDeviceType(devices){
-        devices.forEach(element => {
-            
-        });
-    }
+        let tableAfterUnification = []
 
-    getUnitEnergy(){
+        return new Promise((resolve, reject) => {
 
-    }
+            devices.forEach(element => {
 
+                return UnificationOfUnits.choiceShop(element[0].referral).unificate(element).then(result => {
+                    tableAfterUnification.push(result)
+                }).catch(err => { reject(err) })
 
+            })
+            resolve(tableAfterUnification)
 
-
-
-
-    /**
-     * 
-     * na podstawie listy urządzeń(nazwa + adres URI) stworzenie tablicy obiektów <html...>
-     */
-    getScrapperHtmlTab() {
-        return this.getNameAndAddresses().then(response => {
-            console.log(response)
-            //return listScrapper.getScrapperList(response);
-            return response;
-
-        }).catch(error => {
-            return error;
-        })
-    }
-
-    /**
-     * 
-     * na podstawie strony bazowej sklepu(media markt/media expert/euro rtv agd) stworzenie listy urządzeń (nazwa + adres URI)
-     */
-    getNameAndAddresses() {
-
-        return rp(this.domain).then((html) => {
-            return DeviceListParser.create(this.market).parse(html, this.baseDomainName);
-        }).catch((error) => {
-            return error;
-        })
+        }).catch(err => { return err })
     }
 }
+
+/**
+ * wybór klasy do unifikacji danych
+ */
+UnificationOfUnits.choiceShop = (referral) => {
+    switch (referral) {
+        case 'mediaMarkt':
+            return new MediaMarktUnification();
+        case 'mediaExpert':
+            return new MediaExpertUnification();
+        case 'euroRtvAgd':
+            return new EuroRtvAgdUnification();
+    }
+}
+
+
 
 module.exports = { UnificationOfUnits }

@@ -34,11 +34,11 @@ function parseResponseHtml(html, model) {
             }
 
             if (powerConsumptionIdx > 0) {
-                powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
+                powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
             }
 
             if (annualEnergyConsumptionIdx > 0) {
-                annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
+                annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
             }
 
             if (noiseLevelIdx > 0) {
@@ -55,7 +55,7 @@ function parseResponseHtml(html, model) {
                 annualEnergyConsumption,
                 noiseLevel,
                 producent,
-                model
+                model 
             });
 
             resolve(allData);

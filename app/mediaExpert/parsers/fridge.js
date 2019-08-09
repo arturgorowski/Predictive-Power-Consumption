@@ -36,7 +36,10 @@ function parseResponseHtml(html) {
             }
 
             if (annualEnergyConsumptionIdx > 0 || annualEnergyConsumptionIdx1 > 0) {
-                annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx > 0 ? annualEnergyConsumptionIdx : annualEnergyConsumptionIdx1].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim() + ' kWh';
+                annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx > 0 ? annualEnergyConsumptionIdx : annualEnergyConsumptionIdx1].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+
+                powerConsumption = annualEnergyConsumption / 366
+                powerConsumption = Math.round(annualEnergyConsumptionTemp * 100) / 100
             }
 
             if (noiseLevelIdx > 0) {

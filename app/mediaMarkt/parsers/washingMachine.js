@@ -43,8 +43,8 @@ const parseResponseHtml = (html, model) => {
             powerNode.children.forEach((item, k) => {
                 if (item.type !== "text") {
                     let dt = $(item).find("dt").text().trim();
-                    if (dt === 'Energii w trybie czuwania [W]') powerConsumptionStandby = Number($(item).find("dd").text().trim()) + ' W';
-                    if (dt === 'Energii na rok [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim()) + ' kWh';
+                    if (dt === 'Energii w trybie czuwania [W]') powerConsumptionStandby = (Number($(item).find("dd").text().trim()))/1000; 
+                    if (dt === 'Energii na rok [kWh]') annualEnergyConsumption = Number($(item).find("dd").text().trim());
                 }
             });
 
