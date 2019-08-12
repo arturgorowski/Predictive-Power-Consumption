@@ -10,7 +10,7 @@ let energyClass = 'no data',
 /**
  * 
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
- */
+ */ 
 function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
         try {

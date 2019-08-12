@@ -22,7 +22,7 @@ function parseResponseHtml(html, model) {
             let div = $('table.description-tech-details.js-tech-details');
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
-            let powerConsumptionIdx = $("td:contains('Pobór mocy')").parent("tr").index();
+            let powerConsumptionIdx = $("td:contains('Pobór mocy')").parent("tr").index(); 
             //let powerConsumptionStandbyIdx = $("td:contains('Pobór mocy w trybie gotowości')").parent("tr").index();
 
             if (powerConsumptionIdx > 0) {

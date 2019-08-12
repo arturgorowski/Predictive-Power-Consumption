@@ -19,6 +19,7 @@ function parseResponseHtml(html, model) {
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            
             productName = productName.slice(9);
             producent = productName.split(" ", 1)[0];
             let div = $('table.m-product_dataRow.is-technology');

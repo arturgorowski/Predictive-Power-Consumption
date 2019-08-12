@@ -1,57 +1,13 @@
-let bluRayParserMediaMarkt = require('../mediaMarkt/parsers/bluRay').parseResponseHtml;
-let bluRayParserMediaExpert = require('../mediaExpert/parsers/bluRay').parseResponseHtml;
-let bluRayParserEuroRtvAgd = require('../euroRtvAgd/parsers/bluRay').parseResponseHtml;
-
-let cookerParserMediaMarkt = require('../mediaMarkt/parsers/cooker').parseResponseHtml;
-let cookerParserMediaExpert = require('../mediaExpert/parsers/cooker').parseResponseHtml;
-let cookerParserEuroRtvAgd = require('../euroRtvAgd/parsers/cooker').parseResponseHtml;
-
-let dryerParserMediaMarkt = require('../mediaMarkt/parsers/dryer').parseResponseHtml;
-let dryerParserMediaExpert = require('../mediaExpert/parsers/dryer').parseResponseHtml;
-let dryerParserEuroRtvAgd = require('../euroRtvAgd/parsers/dryer').parseResponseHtml;
-
-let fridgeParserMediaMarkt = require('../mediaMarkt/parsers/fridge').parseResponseHtml;
-let fridgeParserMediaExpert = require('../mediaExpert/parsers/fridge').parseResponseHtml;
-let fridgeParserEuroRtvAgd = require('../euroRtvAgd/parsers/fridge').parseResponseHtml;
-
-let homeTheaterSetParserMediaMarkt = require('../mediaMarkt/parsers/homeTheaterSet').parseResponseHtml;
-let homeTheaterSetParserMediaExpert = require('../mediaExpert/parsers/homeTheaterSet').parseResponseHtml;
-let homeTheaterSetParserEuroRtvAgd = require('../euroRtvAgd/parsers/homeTheaterSet').parseResponseHtml;
-
-let ovenParserMediaMarkt = require('../mediaMarkt/parsers/oven').parseResponseHtml;
-let ovenParserMediaExpert = require('../mediaExpert/parsers/oven').parseResponseHtml;
-let ovenParserEuroRtvAgd = require('../euroRtvAgd/parsers/oven').parseResponseHtml;
-
-let soundbarParserMediaMarkt = require('../mediaMarkt/parsers/soundbar').parseResponseHtml;
-let soundbarParserMediaExpert = require('../mediaExpert/parsers/soundbar').parseResponseHtml;
-let soundbarParserEuroRtvAgd = require('../euroRtvAgd/parsers/soundbar').parseResponseHtml;
-
-let tvParserMediaMarkt = require('../mediaMarkt/parsers/tv').parseResponseHtml;
-let tvParserMediaExpert = require('../mediaExpert/parsers/tv').parseResponseHtml;
-let tvParserEuroRtvAgd = require('../euroRtvAgd/parsers/tv').parseResponseHtml;
-
-let washerParserMediaMarkt = require('../mediaMarkt/parsers/washer').parseResponseHtml;
-let washerParserMediaExpert = require('../mediaExpert/parsers/washer').parseResponseHtml;
-let washerParserEuroRtvAgd = require('../euroRtvAgd/parsers/washer').parseResponseHtml;
-
-let washerDryerParserMediaMarkt = require('../mediaMarkt/parsers/washerDryer').parseResponseHtml;
-let washerDryerParserMediaExpert = require('../mediaExpert/parsers/washerDryer').parseResponseHtml;
-let washerDryerParserEuroRtvAgd = require('../euroRtvAgd/parsers/washerDryer').parseResponseHtml;
-
-let washingMachineParserMediaMarkt = require('../mediaMarkt/parsers/washingMachine').parseResponseHtml;
-let washingMachineParserMediaExpert = require('../mediaExpert/parsers/washingMachine').parseResponseHtml;
-let washingMachineParserEuroRtvAgd = require('../euroRtvAgd/parsers/washingMachine').parseResponseHtml;
-
 let responseHtmlMediaMarkt = require('../mediaMarkt/ParseResponseHtmlMediaMarkt').parseResponseHtml
-
+let responseHtmlMediaExpert = require('../mediaExpert/ParseResponseHtmlMediaExpert').parseResponseHtml
+let responseHtmlEuroRtvAgd = require('../euroRtvAgd/ParseResponseHtmlEuroRtvAgd').parseResponseHtml
 
 
 const DeviceListParser = require('../app').DeviceListParser;
-const ParseResponseHtmlMediaMarkt = require('../mediaMarkt/ParseResponseHtmlMediaMarkt').ParseResponseHtmlMediaMarkt;
+// const ParseResponseHtmlMediaMarkt = require('../mediaMarkt/ParseResponseHtmlMediaMarkt').ParseResponseHtmlMediaMarkt;
 // const ParseResponseHtmlMediaExpert = require('../mediaExpert/ParseResponseHtmlMediaExpert').ParseResponseHtmlMediaExpert;
 // const ParseResponseHtmlEuroRtvAgd = require('../euroRtvAgd/ParseResponseHtmlEuroRtvAgd').ParseResponseHtmlEuroRtvAgd;
 const mongoose = require('mongoose');
-
 const getAllData = require('../DAO/devicesDAO').getAllData;
 mongoose.connect('mongodb://localhost/predictivePowerConsumption', { useNewUrlParser: true });
 let db = mongoose.connection;
@@ -60,7 +16,7 @@ db.on('error', console.error.bind(console, 'connection error'));
 
 const DevicesPowerInformationModel = require('../DAO/devicesDetailsDAO').model;
 const listScrapper = new DeviceListParser();
-const mediaMarktParser = new ParseResponseHtmlMediaMarkt();
+// const mediaMarktParser = new ParseResponseHtmlMediaMarkt();
 // const mediaExpertParser = new ParseResponseHtmlMediaExpert();
 // const euroRtvAgdParser = new ParseResponseHtmlEuroRtvAgd();
 
@@ -76,15 +32,15 @@ getAllData().then((result) => {
     });
 
     let objects = []
-    for (let i = 0; i < allUrlData.length; i += 30) {
-        let sliced = allUrlData.slice(i, i + 30)
+    for (let i = 0; i < allUrlData.length; i += 20) {
+        let sliced = allUrlData.slice(i, i + 20)
         objects.push(sliced)
     }
 
     console.log(">>>>", objects.length)
 
     //6, 8 nie poszło
-    callingData(objects[7]).then((response) => {
+    callingData(objects[36]).then((response) => {
         console.log("just right now >>>", response)
 
         //allData.push(response)
@@ -130,195 +86,32 @@ function callingData(allUrlData) {
 
                 shopType = htmlObject[i].shop;
                 deviceType = htmlObject[i].type;
-                parserType = htmlObject[i].type;
                 model = htmlObject[i].model;
 
                 if (shopType === "mediaMarkt") {
-                    return mediaMarktParser.getPowerNode(htmlObject[i].response, model, deviceType).then(response => {
+
+                    responseHtmlMediaMarkt(htmlObject[i].response, model, deviceType).then(response => {
                         return allData.push(response);
-                        //return response
                     }).catch(err => { reject(err) });
+
                 }
 
                 if (shopType === "mediaExpert") {
-                    switch (parserType) {
 
-                        case 'bluRay':
-                            bluRayParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
+                    responseHtmlMediaExpert(htmlObject[i].response, model, deviceType).then(response => {
+                        return allData.push(response);
+                    }).catch(err => { reject(err) });
 
-                        case 'cooker':
-                            cookerParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'dryer':
-                            dryerParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'fridge':
-                            fridgeParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'homeTheaterSet':
-                            homeTheaterSetParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'oven':
-                            ovenParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'soundbar':
-                            soundbarParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'tv':
-                            tvParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washer':
-                            washerParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washerDryer':
-                            washerDryerParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washingMachine':
-                            washingMachineParserMediaExpert(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-                    }
                 }
-
-
 
                 if (shopType === "euroRtvAgd") {
-                    switch (parserType) {
 
-                        case 'bluRay':
-                            bluRayParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
+                    responseHtmlEuroRtvAgd(htmlObject[i].response, model, deviceType).then(response => {
+                        console.log(response)
+                        return allData.push(response);
+                    }).catch(err => { reject(err) });
 
-                        case 'cooker':
-                            cookerParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'dryer':
-                            dryerParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'fridge':
-                            fridgeParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'homeTheaterSet':
-                            homeTheaterSetParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'oven':
-                            ovenParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'soundbar':
-                            soundbarParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'tv':
-                            tvParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washer':
-                            washerParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washerDryer':
-                            washerDryerParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-
-                        case 'washingMachine':
-                            washingMachineParserEuroRtvAgd(htmlObject[i].response, model).then(response => {
-                                return allData.push(response);
-                                //return response
-                            }).catch(err => { reject(err) });
-                            break;
-                    }
                 }
-
-                // if (shopType === "mediaExpert") {
-                //     mediaExpertParser.parseResponseHtml(htmlObject[i].response, model, deviceType).then(response => {
-                //         return allData.push(response);
-                //         //return response
-                //     }).catch(err => { reject(err) });
-                // }
-
-                // if (shopType === "euroRtvAgd") {
-                //     euroRtvAgdParser.parseResponseHtml(htmlObject[i].response, model, deviceType).then(response => {
-                //         return allData.push(response);
-                //         //return response
-                //     }).catch(err => { reject(err) });
-                // }
             }
 
             resolve(allData);

@@ -36,8 +36,8 @@ function parseResponseHtml(html, model) {
 
                 annualEnergyConsumption = (annualEnergyConsumption.split(" ", 1)[0])
                 powerConsumption = annualEnergyConsumption / 366
-                powerConsumption = Math.round(annualEnergyConsumptionTemp * 100) / 1
-            }
+                powerConsumption = Math.round(powerConsumption * 100) / 1
+            } 
 
             if (noiseLevelIndex > 0) {
                 noiseLevel = powerNode[noiseLevelIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();

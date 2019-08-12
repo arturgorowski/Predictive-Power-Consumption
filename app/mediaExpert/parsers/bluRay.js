@@ -16,7 +16,7 @@ function parseResponseHtml(html, model) {
         try {
             const allData = [];
 
-            const $ = cheerio.load(html);
+            const $ = cheerio.load(html); 
 
             let attrProductName = $("h3.is-productTitle.tab_desc_title");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();

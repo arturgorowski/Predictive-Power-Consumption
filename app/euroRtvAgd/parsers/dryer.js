@@ -45,7 +45,7 @@ function parseResponseHtml(html, model) {
             }
 
             allData.push({
-                referral: "euroRtvAgd",
+                referral: "euroRtvAgd", 
                 deviceType: 'dryer',
                 productName,
                 energyClass,

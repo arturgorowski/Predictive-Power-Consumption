@@ -21,7 +21,7 @@ function parseResponseHtml(html, model) {
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();
             producent = productName.split(" ", 1)[0];
             let div = $('table.description-tech-details.js-tech-details');
-            const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
+            const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag"); 
 
             let energyClassIndex = $("td:contains('Klasa energetyczna')").parent("tr").index();
             let cyclePowerConsumptionIndex = $("td:contains('Zużycie energii - cykl')").parent("tr").index();

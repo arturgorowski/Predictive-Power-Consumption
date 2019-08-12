@@ -13,7 +13,7 @@ powerConsumption = 'no data',
  */
 function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
-        try {
+        try { 
             const allData = [];
 
             const $ = cheerio.load(html);

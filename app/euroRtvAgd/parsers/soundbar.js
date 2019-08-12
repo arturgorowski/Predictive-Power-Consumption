@@ -8,7 +8,7 @@ let energyClass = 'no data',
     producent = 'no data';
 
 /**
- * 
+ *  
  * funkcja parsująca obiekt html na informacje zużyciu energii podanym przez producenta
  */
 function parseResponseHtml(html, model) {

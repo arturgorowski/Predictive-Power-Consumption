@@ -14,7 +14,7 @@ let energyClass = 'no data',
 function parseResponseHtml(html, model) {
     return new Promise((resolve, reject) => {
         try {
-            const allData = [];
+            const allData = []; 
             const $ = cheerio.load(html);
             let attrProductName = $("h1.selenium-KP-product-name");
             let productName = attrProductName[0].childNodes[0].nodeValue.trim();

@@ -44,7 +44,7 @@ function parseResponseHtml(html, model) {
                 noiseLevel = powerNode[noiseLevelIndex].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
             }
 
-            allData.push({
+            allData.push({ 
                 referral: "euroRtvAgd",
                 deviceType: 'washer',
                 productName,
