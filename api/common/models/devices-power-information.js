@@ -38,34 +38,46 @@ module.exports = function (Devicespowerinformation) {
                 if (time !== undefined) {
                     results.forEach(device => {
                         switch (device.deviceType) {
-                            case fridge:
-                                return cb(null, { type: 'fr',total: count, result: results });
-                            case washingMachine:
-                                return cb(null, { type: 'wm',total: count, result: results });
-                            case oven:
-                                return cb(null, { type: 'ov',total: count, result: results });
-                            case soundbar:
-                                return cb(null, { type: 'sb',total: count, result: results });
-                            case washer:
-                                return cb(null, { type: 'w',total: count, result: results });
-                            case tv:
-                                return cb(null, { type: 'tv',total: count, result: results });
-                            case dryer:
-                                return cb(null, { type: 'dr',total: count, result: results });
-                            case washerDryer:
-                                return cb(null, { type: 'wd',total: count, result: results });
-                            case cooker:
-                                return cb(null, { type: 'c',total: count, result: results });
-                            case homeTheaterSet:
-                                return cb(null,  {type: 'hts',total: count, result: results });
-                            case bluRay:
-                                return cb(null, { type: 'br',total: count, result: results });
+                            case 'fridge':
+                                return cb(null, { type: 'fr', total: count, result: results });
+
+                            case 'washingMachine':
+                                device.powerConsumption = device.powerConsumption * time
+                                device.powerConsumption = Math.round(device.powerConsumption * 100) / 100;
+                                return cb(null, { type: 'wm', total: count, result: results, time: time });
+
+                            case 'oven':
+                                return cb(null, { type: 'ov', total: count, result: results });
+
+                            case 'soundbar':
+                                return cb(null, { type: 'sb', total: count, result: results, time: time });
+
+                            case 'washer':
+                                return cb(null, { type: 'w', total: count, result: results });
+
+                            case 'tv':
+                                return cb(null, { type: 'tv', total: count, result: results });
+
+                            case 'dryer':
+                                return cb(null, { type: 'dr', total: count, result: results });
+
+                            case 'washerDryer':
+                                return cb(null, { type: 'wd', total: count, result: results });
+
+                            case 'cooker':
+                                return cb(null, { type: 'c', total: count, result: results });
+
+                            case 'homeTheaterSet':
+                                return cb(null, { type: 'hts', total: count, result: results, time: time });
+
+                            case 'bluRay':
+                                return cb(null, { type: 'br', total: count, result: results });
 
                         }
                     })
                 }
 
-                return cb(null, { total: count, result: results });
+                else return cb(null, { total: count, result: results });
 
             });
         }).catch(function (err) {
