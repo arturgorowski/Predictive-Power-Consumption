@@ -20,18 +20,40 @@ class HomePage extends React.Component {
       powerConsumptionStandby: '',
       annualEnergyConsumption: '',
       noiseLevel: '',
-      producent: ''
+      producent: '',
+      time: 1
     }
+
   }
 
-  onSubmitText = () => {
+  onSubmitTime = () => {
+    console.log(event.target.value)
+    this.setState({ time: event.target.value })
+
+    // let evt = document.createEvent("HTMLEvents");
+    // evt.initEvent("change", false, true);
+    // let elem = document.getElementById('autocomplete')
+    // elem.dispatchEvent(evt)
+    let elem = document.getElementById('time')
+    elem.addEventListener('change', this.onSubmitText(event.target.value))
+
+  }
+
+  onSubmitText = (time) => {
+    console.log("???", time)
+
     new Autocomplete('#autocomplete', {
 
       // Search function can return a promise
-      // which resolves with an array of
+      // which resolves with an array of 
       // results.
       search: input => {
-        const url = `${deviceUrl}=${encodeURI(input)}`
+
+        console.log('time', time)
+
+        let url
+        time > 1 ? url = `${deviceUrl}=${encodeURI(input)}&time=${time}` : url = `${deviceUrl}=${encodeURI(input)}`
+        //const url = `${deviceUrl}=${encodeURI(input)}`
         console.log(url)
 
         return new Promise(resolve => {
@@ -51,73 +73,18 @@ class HomePage extends React.Component {
 
       onSubmit: result => {
         if (result !== undefined) {
-          if (result.deviceType === 'fridge') {
-            if (result.powerConsumption === 'no data' && result.annualEnergyConsumption === 'no data') {
-              this.setState({
-                productName: result.productName,
-                producent: result.producent,
-                energyClass: result.energyClass,
-                powerConsumption: result.powerConsumption,
-                powerConsumptionStandby: result.powerConsumptionStandby,
-                annualEnergyConsumption: result.annualEnergyConsumption,
-                noiseLevel: result.noiseLevel,
-                deviceType: result.deviceType
-              })
 
-            }
-            if (result.powerConsumption === 'no data' && result.annualEnergyConsumption !== 'no data') {
-              let annualEnergyConsumptionTemp = (result.annualEnergyConsumption.split(" ", 1)[0]) / 366
-              let annualEnergyTemp = result.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
-              //console.log(annualEnergyTemp)
-              annualEnergyConsumptionTemp = Math.round(annualEnergyConsumptionTemp * 100) / 100
-              annualEnergyConsumptionTemp = annualEnergyConsumptionTemp + ' kWh'
-              this.setState({
-                productName: result.productName,
-                producent: result.producent,
-                energyClass: result.energyClass,
-                powerConsumption: annualEnergyConsumptionTemp,
-                powerConsumptionStandby: result.powerConsumptionStandby,
-                annualEnergyConsumption: annualEnergyTemp,
-                noiseLevel: result.noiseLevel,
-                deviceType: result.deviceType
-              })
+          this.setState({
+            deviceType: result.deviceType,
+            productName: result.productName,
+            energyClass: result.energyClass,
+            powerConsumption: result.powerConsumption,
+            powerConsumptionStandby: result.powerConsumptionStandby,
+            annualEnergyConsumption: result.annualEnergyConsumption,
+            noiseLevel: result.noiseLevel,
+            producent: result.producent
+          })
 
-            } else {
-              this.setState({
-                productName: result.productName,
-                producent: result.producent,
-                energyClass: result.energyClass,
-                powerConsumption: result.powerConsumption,
-                powerConsumptionStandby: result.powerConsumptionStandby,
-                annualEnergyConsumption: result.annualEnergyConsumption,
-                noiseLevel: result.noiseLevel,
-                deviceType: result.deviceType
-              })
-            }
-          } else {
-            let annualEnergyTemp
-            result.annualEnergyConsumption === 'no data' ? annualEnergyTemp = 'no data' : annualEnergyTemp = result.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
-            this.setState({
-              productName: result.productName,
-              producent: result.producent,
-              energyClass: result.energyClass,
-              powerConsumption: result.powerConsumption,
-              powerConsumptionStandby: result.powerConsumptionStandby,
-              annualEnergyConsumption: annualEnergyTemp,
-              noiseLevel: result.noiseLevel,
-              deviceType: result.deviceType
-            })
-          }
-          // this.setState({
-          //   deviceType: result.deviceType,
-          //   productName: result.productName,
-          //   energyClass: result.energyClass,
-          //   powerConsumption: result.powerConsumption,
-          //   powerConsumptionStandby: result.powerConsumptionStandby,
-          //   annualEnergyConsumption: result.annualEnergyConsumption,
-          //   noiseLevel: result.noiseLevel,
-          //   producent: result.producent
-          // })
         }
       }
     })
@@ -142,7 +109,19 @@ class HomePage extends React.Component {
               onChange={this.onSubmitText}
             />
             <ul className={styles.autocompleteResult}></ul>
+
           </div>
+
+          <div id='time' className={styles.autocomplete}>
+            <input
+              className={styles.autocompleteInput}
+              type="number"
+              name="timeInput"
+              placeholder='per hour...'
+              onChange={this.onSubmitTime}
+            />
+          </div>
+
 
           <div className={styles.about}>
             <Link className={styles.aboutPage} style={{ marginRight: 20 }} to='/about1/'>About1</Link>

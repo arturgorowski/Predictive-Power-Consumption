@@ -111,10 +111,10 @@ const Pagination = ({ device }) => {
     { id: 'productName', numeric: false, disablePadding: false, label: 'Product name' },
     { id: 'producent', numeric: false, disablePadding: true, label: 'Producent' },
     { id: 'energyClass', numeric: false, disablePadding: true, label: 'Energy class' },
-    { id: 'powerConsumption', numeric: false, disablePadding: true, label: 'Power consumption' },
-    { id: 'powerConsumptionStandby', numeric: false, disablePadding: true, label: 'Power consumption standby' },
-    { id: 'annualEnergyConsumption', numeric: false, disablePadding: true, label: 'Annual energy consumption' },
-    { id: 'noiseLevel', numeric: false, disablePadding: true, label: 'Noise level' },
+    { id: 'powerConsumption', numeric: false, disablePadding: true, label: 'Power consumption [kWh]' },
+    { id: 'powerConsumptionStandby', numeric: false, disablePadding: true, label: 'Power consumption standby [kWh]' },
+    { id: 'annualEnergyConsumption', numeric: false, disablePadding: true, label: 'Annual energy consumption [kWh]' },
+    { id: 'noiseLevel', numeric: false, disablePadding: true, label: 'Noise level [dB]' },
   ];
 
   function EnhancedTableHead(props) {
@@ -163,63 +163,65 @@ const Pagination = ({ device }) => {
   function createData(device) {
     let data = []
     device.result.forEach((item) => {
-      if (item.deviceType === 'fridge') {
-        if (item.powerConsumption === 'no data' && item.annualEnergyConsumption === 'no data') {
-          data.push({
-            productName: item.productName,
-            producent: item.producent,
-            energyClass: item.energyClass,
-            powerConsumption: item.powerConsumption,
-            powerConsumptionStandby: item.powerConsumptionStandby,
-            annualEnergyConsumption: item.annualEnergyConsumption,
-            noiseLevel: item.noiseLevel,
-            deviceType: item.deviceType
-          })
 
-        }
-        if (item.powerConsumption === 'no data' && item.annualEnergyConsumption !== 'no data') {
-          let annualEnergyConsumptionTemp = (item.annualEnergyConsumption.split(" ", 1)[0]) / 366
-          let annualEnergyTemp = item.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
-          //console.log(annualEnergyTemp)
-          annualEnergyConsumptionTemp = Math.round(annualEnergyConsumptionTemp * 100) / 100
-          annualEnergyConsumptionTemp = annualEnergyConsumptionTemp + ' kWh'
-          data.push({
-            productName: item.productName,
-            producent: item.producent,
-            energyClass: item.energyClass,
-            powerConsumption: annualEnergyConsumptionTemp,
-            powerConsumptionStandby: item.powerConsumptionStandby,
-            annualEnergyConsumption: annualEnergyTemp,
-            noiseLevel: item.noiseLevel,
-            deviceType: item.deviceType
-          })
+      // if (item.deviceType === 'fridge') {
 
-        } else {
-          data.push({
-            productName: item.productName,
-            producent: item.producent,
-            energyClass: item.energyClass,
-            powerConsumption: item.powerConsumption,
-            powerConsumptionStandby: item.powerConsumptionStandby,
-            annualEnergyConsumption: item.annualEnergyConsumption,
-            noiseLevel: item.noiseLevel,
-            deviceType: item.deviceType
-          })
-        }
-      } else {
-        let annualEnergyTemp
-        item.annualEnergyConsumption === 'no data' ? annualEnergyTemp = 'no data' : annualEnergyTemp = item.annualEnergyConsumption.split(" ", 1)[0] + ' kWh'
-        data.push({
-          productName: item.productName,
-          producent: item.producent,
-          energyClass: item.energyClass,
-          powerConsumption: item.powerConsumption,
-          powerConsumptionStandby: item.powerConsumptionStandby,
-          annualEnergyConsumption: annualEnergyTemp,
-          noiseLevel: item.noiseLevel,
-          deviceType: item.deviceType
-        })
-      }
+      //   if (item.powerConsumption === 'no data' && item.annualEnergyConsumption === 'no data') {
+      //     data.push({
+      //       productName: item.productName,
+      //       producent: item.producent,
+      //       energyClass: item.energyClass,
+      //       powerConsumption: item.powerConsumption,
+      //       powerConsumptionStandby: item.powerConsumptionStandby,
+      //       annualEnergyConsumption: item.annualEnergyConsumption,
+      //       noiseLevel: item.noiseLevel,
+      //       deviceType: item.deviceType
+      //     })
+
+      //   }
+      //   if (item.powerConsumption === 'no data' && item.annualEnergyConsumption !== 'no data') {
+      //     let annualEnergyConsumptionTemp = (item.annualEnergyConsumption.split(" ", 1)[0]) / 366
+      //     let annualEnergyTemp = item.annualEnergyConsumption.split(" ", 1)[0]
+      //     //console.log(annualEnergyTemp)
+      //     annualEnergyConsumptionTemp = Math.round(annualEnergyConsumptionTemp * 100) / 100
+      //     annualEnergyConsumptionTemp = annualEnergyConsumptionTemp
+      //     data.push({
+      //       productName: item.productName,
+      //       producent: item.producent,
+      //       energyClass: item.energyClass,
+      //       powerConsumption: annualEnergyConsumptionTemp,
+      //       powerConsumptionStandby: item.powerConsumptionStandby,
+      //       annualEnergyConsumption: annualEnergyTemp,
+      //       noiseLevel: item.noiseLevel,
+      //       deviceType: item.deviceType
+      //     })
+
+      //   } else {
+      //     data.push({
+      //       productName: item.productName,
+      //       producent: item.producent,
+      //       energyClass: item.energyClass,
+      //       powerConsumption: item.powerConsumption,
+      //       powerConsumptionStandby: item.powerConsumptionStandby,
+      //       annualEnergyConsumption: item.annualEnergyConsumption,
+      //       noiseLevel: item.noiseLevel,
+      //       deviceType: item.deviceType
+      //     })
+      //   }
+      // } else {
+      let annualEnergyTemp
+      item.annualEnergyConsumption === 'no data' ? annualEnergyTemp = 'no data' : annualEnergyTemp = item.annualEnergyConsumption.split(" ", 1)[0]
+      data.push({
+        productName: item.productName,
+        producent: item.producent,
+        energyClass: item.energyClass,
+        powerConsumption: item.powerConsumption,
+        powerConsumptionStandby: item.powerConsumptionStandby,
+        annualEnergyConsumption: annualEnergyTemp,
+        noiseLevel: item.noiseLevel,
+        deviceType: item.deviceType
+      })
+      //}
     })
     return { data };
   }
