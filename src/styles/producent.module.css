@@ -2,25 +2,30 @@ p{
     margin: 10px;
 }
 .deviceContainer{
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
     margin-top: 15px;
 }
 
 .categories{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.deviceType{
+.productName, .productNameDetails{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-left: 10px;
+}
+
+.producent, .productNameList, .dataDeviceInfo, .productNameDetails{
     color: black;
     background: white;
     opacity: 0.5;
-    font-size: 1rem;
+    font-size: 1.4rem;
     cursor: pointer;
     width: fit-content;
     height: 40px;
@@ -28,25 +33,18 @@ p{
     padding: 7px 3px 0px 3px;
 }
 
-.deviceInformation{
+.productNameList{
     display: flex;
-    margin-top: 30px;
     flex-direction: row; 
 }
 
-.textDeviceInfo{
-    flex: 1;
-    font-size: 2rem;
-    width: 50%;
-    height: 200px;
-    opacity: 1;
-    text-align: right;
-    font-weight: bold;
-    border: none;
+.productNameDetails{
+    cursor: none;
+    display: flex;
+    align-items: center;
 }
 
 .dataDeviceInfo{
-    flex: 1;
     font-size: 2rem;
     width: 50%;
     height: 200px;
@@ -56,8 +54,9 @@ p{
 }
   
 /* Style the active class (and buttons on mouse-over) */
-.active, .deviceType:hover {
+.active, .producent:hover {
   background-color: #666;
   color: white;
   font-weight: bold;
 }
+

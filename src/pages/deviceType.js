@@ -3,6 +3,7 @@ import React from 'react'
 import styles from '../styles/deviceType.module.css'
 //import DeviceTypeTemplate from '../templates/deviceType';
 import Pagination from '../templates/pagination'
+import Navbar from '../components/navbar';
 
 const deviceTypeUrl = 'http://localhost:3000/api/devicesPowerInformations/allDeviceType'
 const searchDeviceUrl = 'http://localhost:3000/api/devicesPowerInformations/findByDeviceType?search='
@@ -72,20 +73,9 @@ class DeviceType extends React.Component {
             </div>
         );
 
-        // const details = (
-        //     <div className={styles.details}>
-        //         {
-        //             this.state.clicked ?
-        //                 this.state.device.result.map((item, k) => {
-        //                     return <DeviceTypeTemplate id={k} device={item} />
-        //                 })
-        //                 : ''
-        //         }
-        //     </div>
-        // );
-
         return (
             <>
+                <Navbar />
                 <div className={styles.deviceContainer}>
                     {
                         this.state.fetched ? categories : ''

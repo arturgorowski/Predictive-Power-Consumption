@@ -1,13 +1,17 @@
 import React from "react"
 import { graphql } from 'gatsby'
 import Page from '../templates/page'
+import Navbar from '../components/navbar'
 
 const About1 = ({ data }) => {
-    return (
-        <div>
-            <Page data={data.allGhostPage.edges[2].node} />
-        </div>
-    )
+  return (
+    <>
+      <Navbar />
+      <div>
+        <Page data={data.allGhostPage.edges[2].node} />
+      </div>
+    </>
+  )
 }
 
 export const query = graphql`

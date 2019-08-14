@@ -1,0 +1,123 @@
+td{
+    width: 250px;
+    text-align: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    min-height: 850px;
+    background-image: url('https://wallpapercave.com/wp/wp3594938.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-bottom: 370px
+}
+
+.description{
+    color: white;
+    font-size: 4rem;
+    margin-bottom: 10px;
+    margin-top: 60px;
+}
+
+.title{
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.autocomplete{
+    justify-content:  center;
+}
+
+.autocompleteInput, .timeInput{
+    font-size: 2rem;
+    height: 50;
+    opacity: 0.6;
+    text-align: center;
+    border-radius: 4px;
+    border: none; 
+}
+
+.autocompleteInput{
+    width: 60%;
+}
+
+.timeInput{
+    width: 20%;
+    margin-top: 5px;
+}
+
+.autocompleteResult{
+    cursor: pointer;
+    margin: 0;
+    font-size: 2rem;
+    padding: 0;
+    box-sizing: border-box;
+    max-height: 296px;
+    overflow-y: auto;
+    background-color: #fff;
+    opacity: 0.8;
+    list-style: none;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, .16);
+}
+
+li:hover{
+    background: orange;
+}
+
+.about{
+    flex-direction: column;
+    margin: 0;
+    align-content: center;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1.5rem;
+}
+
+.aboutPage{
+    text-decoration: none;
+    color: #fff;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+.deviceInformation{
+    display: flex;
+    margin-top: 30px;
+    flex-direction: row; 
+    opacity: 0.89;
+}
+
+.textDeviceInfo{
+    flex: 1;
+    font-size: 2rem;
+    width: 50%;
+    height: 200px;
+    text-align: right;
+    font-weight: bold;
+    border: none;
+    color: #fff;
+}
+
+.dataDeviceInfo{
+    flex: 1;
+    font-size: 2rem;
+    width: 50%;
+    height: 200px;
+    text-align: left;
+    font-weight: bold;
+    color: #fff;
+}
+
+.deviceType{
+    align-items: right;
+}

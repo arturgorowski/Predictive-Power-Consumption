@@ -6,98 +6,9 @@
     text-align: center;
     width: 100%;
     min-height: 850px;
-    background-image: url('https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero-00e10b1f.jpg');
+    background-image: url('https://wallpapercave.com/wp/wp3594938.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     padding-bottom: 370px
-}
-
-.description{
-    color: white;
-    font-size: 4vw;
-    margin-bottom: 10px;
-    margin-top: 60px;
-}
-
-.title{
-    color: white;
-    font-size: 2vw;
-    margin-bottom: 15px;
-    margin-top: 15px;
-}
-
-.autocomplete{
-    justify-content:  center;
-}
-
-.autocompleteInput{
-    font-size: 2vw;
-    width: 60%;
-    height: 50;
-    opacity: 0.6;
-    text-align: center;
-    border-radius: 4px;
-    border: none; 
-}
-
-.autocompleteResult{
-    cursor: pointer;
-    margin: 0;
-    font-size: 2vw;
-    padding: 0;
-    box-sizing: border-box;
-    max-height: 296px;
-    overflow-y: auto;
-    background-color: #fff;
-    opacity: 0.8;
-    list-style: none;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, .16);
-}
-
-li:hover{
-    background: orange;
-}
-
-.about{
-    flex-direction: column;
-    margin: 0;
-    align-content: center;
-    text-align: center;
-    margin-top: 25px;
-    font-size: 1.5vw;
-}
-
-.aboutPage{
-    text-decoration: none;
-    color: #fff;
-}
-
-.deviceInformation{
-    display: flex;
-    margin-top: 30px;
-    flex-direction: row; 
-}
-
-.textDeviceInfo{
-    flex: 1;
-    font-size: 2vw;
-    width: 50%;
-    height: 200px;
-    text-align: right;
-    font-weight: bold;
-    border: none;
-}
-
-.dataDeviceInfo{
-    flex: 1;
-    font-size: 2vw;
-    width: 50%;
-    height: 200px;
-    text-align: left;
-    font-weight: bold;
-}
-
-.deviceType{
-    align-items: right;
 }
