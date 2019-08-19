@@ -23,12 +23,11 @@ p{
 
 .producent, .productNameList, .dataDeviceInfo, .productNameDetails{
     color: black;
-    background: white;
     opacity: 0.5;
     font-size: 1.4rem;
     cursor: pointer;
     width: fit-content;
-    height: 40px;
+    height: fit-content;
     margin: 0px 0px 5px 0px;
     padding: 7px 3px 0px 3px;
 }
@@ -54,7 +53,7 @@ p{
 }
   
 /* Style the active class (and buttons on mouse-over) */
-.active, .producent:hover {
+.active, .producent:hover, .productNameList:hover {
   background-color: #666;
   color: white;
   font-weight: bold;

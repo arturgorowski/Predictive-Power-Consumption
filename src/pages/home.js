@@ -1,9 +1,10 @@
-import React from 'react'
-import { Link } from 'gatsby'
-import { graphql, StaticQuery } from 'gatsby'
-import Autocomplete from '@trevoreyre/autocomplete-js'
-import styles from '../styles/home.module.css'
-import Navbar from '../components/navbar'
+import React from 'react';
+import { Link } from 'gatsby';
+import { graphql, StaticQuery } from 'gatsby';
+import Autocomplete from '@trevoreyre/autocomplete-js';
+import styles from '../styles/home.module.css';
+import Navbar from '../components/navbar';
+// import AutocompleteInput from '../components/autocomplete';
 
 const deviceUrl = 'http://localhost:3000/api/devicesPowerInformations/all?search'
 
@@ -139,7 +140,7 @@ class HomePage extends React.Component {
           {
             deviceType.length > 0 ?
               <div className={styles.deviceInformation}>
-                <table class="table table-dark">
+                <table className="table table-dark">
                   <tbody>
                     <tr>
                       <td><p>Product name:</p></td>

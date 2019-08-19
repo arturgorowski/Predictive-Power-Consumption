@@ -13,32 +13,32 @@ class Navbar extends React.Component {
     render() {
 
         return (
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 
-                <a class="navbar-brand" href="/">Predictive Power Consumption</a>
+                <a className="navbar-brand" href="/">Predictive Power Consumption</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div style={{ justifyContent: 'flex-end' }} class="collapse navbar-collapse" id="navbarNavDropdown">
+                <div style={{ justifyContent: 'flex-end' }} className="collapse navbar-collapse" id="navbarNavDropdown">
 
-                    <ul class="navbar-nav">
+                    <ul className="navbar-nav">
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/home">Home</a>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/home">Home</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/deviceType">Device Type</a>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/deviceType">Device Type</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/producent">Producent</a>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/producent">Producent</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/roomManagment">Room Managment</a>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/roomManagment">Room Managment</a>
                         </li>
 
                     </ul>
