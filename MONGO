@@ -1,3 +1,12 @@
+db.getCollection('bluRay').find({}).forEach(function (item){
+    db.getCollection('bluRay').updateOne(
+        {"_id": item._id },
+        {"$set": {"type": "bluRay"}}
+    )
+})
+
+db.getCollection('bluRay').copyTo('devices')
+
 db.getCollection('devices').find({}).limit(100).forEach((item)=>{
     
     let model = item.name.trim().split(" ").map(item=> item.replace("-",""));

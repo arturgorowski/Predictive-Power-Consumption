@@ -107,32 +107,39 @@ function parseResponseHtml(html, model, deviceType) {
     return new Promise((resolve, reject) => {
 
         try {
-
+            const allData = [];
             const $ = cheerio.load(html);
             let attrProductName = $("h1.selenium-KP-product-name");
             let div = $('table.description-tech-details.js-tech-details');
             const powerNode = div[0].childNodes[1].children.filter(item => item.type === "tag");
 
-            getPowerNode(deviceType, $).then(result => {
-                console.log("result", result)
 
-                producent = productName.split(" ", 1)[0];
-                productName = attrProductName[0].childNodes[0].nodeValue.trim();
+            getPowerNode(deviceType, $).then(result => {
+                //console.log("result", result)
 
                 let energyClassIdx = $("td:contains('Klasa energetyczna')").parent("tr").index();
-                let noiseLevelIdx = ($("td:contains('Poziom hałasu')").parent("tr").index());
+                let noiseLevelIdx = $("td:contains('Poziom hałasu')").parent("tr").index();
+                powerConsumptionIdx = result.powerConsumptionIdx;
+                powerConsumptionStandbyIdx = result.powerConsumptionStandbyIdx;
+                annualEnergyConsumptionIdx = result.annualEnergyConsumptionIdx;
+
+                productName = attrProductName[0].childNodes[0].nodeValue.trim();
+                producent = productName.split(" ", 1)[0];
                 noiseLevelIdx = noiseLevelIdx > 0 ? noiseLevelIdx : result.noiseLevelIdx
 
-                const { powerConsumptionIdx, powerConsumptionStandbyIdx, annualEnergyConsumptionIdx } = result
-                console.log(energyClassIdx, powerConsumptionIdx, powerConsumptionStandbyIdx, annualEnergyConsumptionIdx, noiseLevelIdx)
+                //console.log(">>>>", energyClassIdx, powerConsumptionIdx, powerConsumptionStandbyIdx, annualEnergyConsumptionIdx, noiseLevelIdx)
 
                 if (powerConsumptionIdx > 0) {
                     powerConsumption = powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+                    // let temp = powerConsumption("contains('kWh')");
+                    // let temp1 = powerConsumption.indexOf("W");
+                    let powerInfo = powerConsumption
+                    powerConsumption = powerConsumption.split(" ", 1)[0];
 
-                    if (deviceType === 'bluRay' || deviceType === 'homeTheaterSet') {
+                    if (deviceType === 'bluRay' || deviceType === 'homeTheaterSet' || deviceType === 'soundbar') {
                         let n = powerInfo.indexOf("W");
-                        powerConsumption = powerInfo.slice(0, n + 1);
-                        powerConsumptionStandby = powerInfo.slice(n + 4);
+                        powerConsumption = (powerInfo.slice(0, n + 1)) / 1000;
+                        powerConsumptionStandby = (powerInfo.slice(n + 4)) / 1000;
                     }
 
                 }
@@ -143,21 +150,24 @@ function parseResponseHtml(html, model, deviceType) {
 
                 if (noiseLevelIdx > 0) {
                     noiseLevel = powerNode[noiseLevelIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+                    noiseLevel = noiseLevel.split(" ", 1)[0];
                 }
 
                 if (annualEnergyConsumptionIdx > 0) {
                     annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+                    annualEnergyConsumption = annualEnergyConsumption.split(" ", 1)[0];
 
                     if (deviceType === 'fridge') {
-                        annualEnergyConsumption = (annualEnergyConsumption.split(" ", 1)[0])
-                        powerConsumption = annualEnergyConsumption / 366
-                        powerConsumption = Math.round(powerConsumption * 100) / 100
+                        powerConsumption = annualEnergyConsumption / 366;
+                        powerConsumption = Math.round(powerConsumption * 100) / 100;
                     }
 
                 }
 
                 if (powerConsumptionStandbyIdx > 0) {
-                    powerConsumptionStandby = powerNode[powerConsumptionStandbyIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
+                    powerConsumptionStandby = (powerNode[powerConsumptionStandbyIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim());
+                    powerConsumptionStandby = powerConsumptionStandby.split(" ", 1)[0];
+                    powerConsumptionStandby = powerConsumptionStandby / 1000;
                 }
 
                 allData.push({
@@ -172,6 +182,7 @@ function parseResponseHtml(html, model, deviceType) {
                     producent,
                     model
                 });
+                //console.log(allData);
                 resolve(allData);
 
             }).catch((error) => { return error })

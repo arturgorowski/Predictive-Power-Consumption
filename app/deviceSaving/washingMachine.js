@@ -11,7 +11,7 @@ const url2 = 'https://www.mediaexpert.pl/pralki?per_page=50&start=';
 const url3 = 'https://www.euro.com.pl/pralki.bhtml?link=mainnavi';
 
 /**
- * 
+ *  
  * zapis nazw i adresów URL do bazy danych
  */
 popingDevice(url1, url2, url3).then(response => {

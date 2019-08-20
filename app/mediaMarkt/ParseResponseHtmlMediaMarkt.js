@@ -154,7 +154,7 @@ function parseResponseHtml(html, model, deviceType) {
                             annualEnergyConsumption = Number($(item).find("dd").text().trim());
 
                             powerConsumption = annualEnergyConsumption / 366
-                            powerConsumption = Math.round(powerConsumption * 100) / 100
+                            powerConsumption = Math.round(powerConsumption * 100) / 100 
                         }
 
                         //oven >>>>>>> kWh
@@ -185,10 +185,10 @@ function parseResponseHtml(html, model, deviceType) {
                         let dt = $(item).find("dt").text().trim();
 
                         //cooker, dryer, fridge, washer
-                        if (dt === 'Poziom hałasu [dB]') noiseLevel = $(item).find("dd").text().trim() + ' dB';
+                        if (dt === 'Poziom hałasu [dB]') noiseLevel = $(item).find("dd").text().trim()
 
                         //washerDryer, washingMachine
-                        if (dt === 'Poziom hałasu podczas wirowania [dB]') noiseLevel = $(item).find("dd").text().trim() + ' dB';
+                        if (dt === 'Poziom hałasu podczas wirowania [dB]') noiseLevel = $(item).find("dd").text().trim();
                     }
                 });
 

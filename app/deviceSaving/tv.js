@@ -16,7 +16,7 @@ const url3 = 'https://www.euro.com.pl/telewizory-led-lcd-plazmowe.bhtml?link=mai
  */
 popingDevice(url1, url2, url3).then(response => {
 
-    console.log(response)
+    console.log(response) 
 
     response.forEach((item) => {
         let object = new TvModel({ name: item.name, address: item.address, shop: item.shop })

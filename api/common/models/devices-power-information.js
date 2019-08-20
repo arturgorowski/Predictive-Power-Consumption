@@ -43,39 +43,39 @@ module.exports = function (Devicespowerinformation) {
                     results.forEach(device => {
                         switch (device.deviceType) {
                             case 'fridge':
-                                return cb(null, { type: 'fr', total: count, result: results });
+                                return cb(null, { type: 'fridge', total: count, result: results });
 
                             case 'washingMachine':
                                 device.powerConsumption = device.powerConsumption * time
                                 device.powerConsumption = Math.round(device.powerConsumption * 100) / 100;
-                                return cb(null, { type: 'wm', total: count, result: results, time: time });
+                                return cb(null, { type: 'washingMachine', total: count, result: results, time: time });
 
                             case 'oven':
-                                return cb(null, { type: 'ov', total: count, result: results });
+                                return cb(null, { type: 'oven', total: count, result: results });
 
                             case 'soundbar':
-                                return cb(null, { type: 'sb', total: count, result: results, time: time });
+                                return cb(null, { type: 'soundbar', total: count, result: results, time: time });
 
                             case 'washer':
-                                return cb(null, { type: 'w', total: count, result: results });
+                                return cb(null, { type: 'washer', total: count, result: results });
 
                             case 'tv':
                                 return cb(null, { type: 'tv', total: count, result: results });
 
                             case 'dryer':
-                                return cb(null, { type: 'dr', total: count, result: results });
+                                return cb(null, { type: 'dryer', total: count, result: results });
 
                             case 'washerDryer':
-                                return cb(null, { type: 'wd', total: count, result: results });
+                                return cb(null, { type: 'washerDryer', total: count, result: results });
 
                             case 'cooker':
-                                return cb(null, { type: 'c', total: count, result: results });
+                                return cb(null, { type: 'cooker', total: count, result: results });
 
                             case 'homeTheaterSet':
-                                return cb(null, { type: 'hts', total: count, result: results, time: time });
+                                return cb(null, { type: 'homeTheaterSet', total: count, result: results, time: time });
 
                             case 'bluRay':
-                                return cb(null, { type: 'br', total: count, result: results });
+                                return cb(null, { type: 'bluRay', total: count, result: results });
 
                         }
                     })

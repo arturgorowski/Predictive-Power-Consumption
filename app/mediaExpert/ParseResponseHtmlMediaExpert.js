@@ -141,18 +141,24 @@ function parseResponseHtml(html, model, deviceType) {
                 }
 
                 if (powerConsumptionIdx > 0) {
-                    powerConsumption = (powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()) / 1000;
+                    powerConsumption = (powerNode[powerConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim());
+
+                    if (deviceType === 'bluRay' || deviceType === 'homeTheaterSet' || deviceType === 'soundbar') {
+                        powerConsumption = powerConsumption / 1000;
+                        powerConsumption = Math.round(powerConsumption * 100) / 100;
+                    }
                 }
 
                 if (powerConsumptionStandbyIdx > 0) {
                     powerConsumptionStandby = (powerNode[powerConsumptionStandbyIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim()) / 1000;
+                    powerConsumptionStandby = Math.round(powerConsumptionStandby * 100) / 100;
                 }
 
                 if (annualEnergyConsumptionIdx > 0) {
                     annualEnergyConsumption = powerNode[annualEnergyConsumptionIdx].children.filter(item => item.type === "tag")[1].children[0].nodeValue.trim();
                     if (deviceType === 'fridge') {
-                        powerConsumption = annualEnergyConsumption / 366
-                        powerConsumption = Math.round(annualEnergyConsumptionTemp * 100) / 100
+                        powerConsumption = annualEnergyConsumption / 366;
+                        powerConsumption = Math.round(annualEnergyConsumptionTemp * 100) / 100;
                     }
                 }
 
