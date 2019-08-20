@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Navbar from '../components/navbar';
 import Modal from '../components/modal';
 
-
 class RoomManagment extends React.Component {
 
     constructor(props) {
@@ -94,21 +93,33 @@ class RoomManagment extends React.Component {
         });
 
         const deviceDetails = this.state.rooms.map((room, index) => {
-            return (
-                <>
-                    ===============
-                    <p>{room.room}</p>
-                    {room.devices.map((device) => {
-                        return (
-                            <>
-                                <h5>{device.productName}</h5>
-                                <p>pc {device.powerConsumption}</p>
-                                <p>aec {device.annualEnergyConsumption}</p>
-                            </>
-                        )
-                    })}
-                </>
-            )
+            if (room.devices.length > 0) {
+                console.log(room.devices.length, room, index)
+                //if(room[])
+                return (
+                    <>
+                        <div class="carousel-item">
+                            <h5 class="card-title">{room.room}</h5>
+                            {
+                                room.devices.map((device) => {
+                                    return (
+
+                                        <div class="card">
+
+                                            <div class="card-body">
+                                                <h5 class="card-title">{device.productName}</h5>
+                                                <p class="card-text">Power consumption: {device.powerConsumption}</p>
+                                                <p class="card-text">Annual energy consumption: {device.annualEnergyConsumption}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </>
+                )
+            }
+
         })
 
         const requiredItem = this.state.requiredItem;
@@ -117,31 +128,70 @@ class RoomManagment extends React.Component {
             <>
                 <Navbar />
                 <div className={styles.container}>
-
                     <div className={styles.plan}>
                         <div className={styles.start}></div>
                         {rooms}
                     </div>
+                </div>
 
-                    <div className={styles.deviceDetailsContainer}>
-                        {deviceDetails}
-                        <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => this.energyConsumption()}
-                        >calculate energy consumption</button>
+                <div className={styles.deviceDetailsContainer}>
 
-                        <p style={{ width: 'max-content' }}>power consumption: {this.state.powerConsumption} [kWh]</p>
-                        <p style={{ width: 'max-content' }}>annual energy consumption: {this.state.annualEnergyConsumption} [kWh/year]</p>
-                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => this.energyConsumption()}
+                    >calculate energy consumption</button>
+
+                    <p className={styles.p}>power consumption: {this.state.powerConsumption} [kWh]</p>
+                    <p className={styles.p}>annual energy consumption: {this.state.annualEnergyConsumption} [kWh/year]</p>
+
 
                 </div>
+
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="carousel-item active">
+                                    <h5 class="card-title">Choosen device</h5>
+
+                                    <div class="card">
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Product Name</h5>
+                                            <p class="card-text">Power consumption</p>
+                                            <p class="card-text">Annual energy consumption</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {deviceDetails}
+                            </div>
+                        </div>
+
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
 
                 <Modal
                     room={modalData.room}
                     devices={modalData.devices}
                     saveModalDevices={this.saveModalDevices}
                 />
+
+
             </>
         )
 

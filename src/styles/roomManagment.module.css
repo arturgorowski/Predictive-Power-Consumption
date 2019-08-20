@@ -3,10 +3,31 @@
 html, body {
   font-family: 'Livvic', sans-serif;
   background: #f7f7f7;
-
   margin: 0;
   padding: 0;
 }
+
+.container{
+  padding-left: 40%;
+}
+
+.deviceDetailsContainer{
+  flex: 1;
+  flex-direction: column;
+  padding: 30% 10%;
+  line-height: normal;
+}
+
+.roomType{
+  width: fit-content;
+  height: 50px;
+}
+
+.p{
+  width: max-content;
+  line-height: normal;
+}
+
 
 .plan {
   margin: 25px 35%;
@@ -90,12 +111,12 @@ div[class^="room"]:nth-child(2):after {
 }
 
 div[class^="room"]:nth-child(3) {
-  left: 180px;
-  top: -87px;
-  width: 200px;
-  height: 150px;
+  left: 173px;
+  top: -77px;
+  width: 207px;
+  height: 160px;
   border-left-color: transparent; 
-  line-height: 100px;  /* FIXME: center text */
+  line-height: 100px;  /*FIXME: center text*/
 }
 
 div[class^="room"]:nth-child(3):before {
@@ -175,11 +196,11 @@ div[class^="room"]:nth-child(5):after {
 }
 
 div[class^="room"]:nth-child(6) {
-  left: 188px;
-  top: -406px;
-  width: 197px; 
+  left: 175px;
+  top: -392px;
+  width: 205px; 
   height: 213px; 
-  line-height: 190px;  
+  line-height: 208px;  
   border-top: transparent;
   border-left: transparent;
 }
@@ -189,13 +210,4 @@ div[class^="room"]:nth-child(6):before {
   right: -4px;
   height: 60px;
   border: 1px solid #fff; 
-}
-
-.container{
-  
-}
-
-.deviceDetailsContainer{
-  flex: 1;
-  flex-direction: column;
 }
