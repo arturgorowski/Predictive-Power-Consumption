@@ -36,7 +36,7 @@
     "useNewUrlParser": true,
     "connector": "mongodb"
   },
-  "devicesPowerInformation": {
+  "devicesPowerInformations": {
     "host": "localhost",
     "port": 27017,
     "url": "",
@@ -44,6 +44,17 @@
     "password": "",
     "name": "devicesPowerInformation",
     "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb",
+    "allowExtendedOperators": true
+  },
+  "devicesPowerInformation": {
+    "port": 27017,
+    "url": "mongodb+srv://admin:admin@cluster0-zqaox.mongodb.net/predictivePowerConsumption",
+    "database": "predictivePowerConsumption",
+    "name": "devicesPowerInformation",
+    "username": "admin",
+    "password": "admin",
     "useNewUrlParser": true,
     "connector": "mongodb",
     "allowExtendedOperators": true
